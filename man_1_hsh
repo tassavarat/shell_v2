@@ -1,0 +1,89 @@
+.Dd 16/4/19=              
+.Dt Simple shell 1
+.Os Ubuntu
+.Sh NAME                 
+.Nm "Simple shell"
+.Nd Custom implementation of shell.
+.Sh SYNOPSIS             
+.Nm
+
+.Nd It takes no arguments
+.Sh DESCRIPTION
+
+Custom shell is imitation of sh, with some built-ins, it has limited functionality. This is a two week project from holbertonschool. It has basic functionality and executes ELF files from PATH variable, even though when full path to the executable is not provided. Also, this shell can handle commands with arguments
+
+.Nm "This is the decription from actual manual page of shell:"
+
+
+    	  The shell is a command that reads lines from either a file or the terminal, interprets them, and generally executes other commands.
+     It is the program that is running when a user logs into the system (although a user can select a different shell with the chsh(1)
+     command).  The shell implements a language that has flow control constructs, a macro facility that provides a variety of features in
+     addition to data storage, along with built in history and line editing capabilities.  It incorporates many features to aid interac‐
+     tive use and has the advantage that the interpretative language is common to both interactive and non-interactive use (shell
+     scripts).  That is, commands can be typed directly to the running shell or can be put into a file and the file can be executed
+     directly by the shell.
+
+.Nm Lexical Structure
+
+     The shell reads input in terms of lines from a file and breaks it up into words at whitespace (blanks and tabs), and at certain
+     sequences of characters that are special to the shell called “operators”.  There are two types of operators: control operators
+     and redirection operators (their meaning is discussed later).  Following is a list of operators:
+
+           Control operators:
+                 & && ( ) ; ;; | || <newline>
+
+           Redirection operators:
+                 < > >| << >> <& >& <<- <>
+
+.Sh Examples
+This shell runs any executable file from the PATH environmental variable, because it prepends directories to the commands. It means that you can execute commands such as
+.Ar ls, pwd, which and so on.
+
+    For full list of commands go to your directories of your PATH environmental variable. For example, /bin directory contains most of the commands, like ls, pwd, which and grep.
+.Nm ls -l /tmp
+    This input will result in the list of files and directories in /tmp directory in long format
+.Nm pwd
+    This will print crrent working directory
+
+.Nm echo
+    This will print specified text to stdout
+
+.Nm BUILT-INS
+
+.Nm env
+    It is built-in command which will print environmental variables
+
+.Nm setenv
+    A command which will set environmental variable
+
+.Nm unsetenv
+    Unsets environmental variable
+
+.Nm exit
+    Exits from the shell, it takes unsigned int as a
+.Ar exit status
+
+.Nm help
+    Displays some info about how to use this simple shell
+
+
+
+.Sh FILES
+.Bl -tag -width "~/simple_shell/" -compact
+.It Pa /simple_shell/main.c
+It is main file with entry point
+.It Pa /simple_shell/shell.c
+It contains main function, or core of the shell 
+.El                      \" Ends the list
+.Sh SEE ALSO
+.Xr bash 1 ,
+.Xr sh 1 ,
+.Xr csh 1 ,
+.Xr zsh 2 ,
+.Sh BUGS
+.Bl
+We are not handling &&, ||, ; and other special characters, we have some issues with setenv, cd 
+.Sh AUTHORS
+.Ar Farrukh Akhrarov
+
+.Ar Tim Assavarat
