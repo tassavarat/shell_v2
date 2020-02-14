@@ -36,3 +36,6 @@ hls
 *.su
 *.idb
 *.pdb
+
+# Shell tester
+shell_v2_checker
