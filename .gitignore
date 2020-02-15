@@ -28,7 +28,7 @@
 *.dylib
 
 # Executables
-hls
+hsh
 *.out
 
 # Debug files
