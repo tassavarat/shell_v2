@@ -2,9 +2,9 @@
 
 # List of variables
 CC=gcc
-CFLAGS=-Wall -Werror -Wextra -pedantic -std=gnu89
+CFLAGS=-Wall -Werror -Wextra -pedantic -std=gnu89 -g
 # name of the executable
-NAME=hls
+NAME=hsh
 # Find all c files in current directory and substitute
 # extension with object files (.o)
 OBJ=$(patsubst %.c,%.o, $(wildcard *.c))
@@ -21,7 +21,7 @@ all: $(NAME)
 $(NAME): $(OBJ)
 	$(CC) -o $@ $^ $(CFLAGS)
 
-.PHONY: clean, run, check
+.PHONY: clean, run, check, memcheck
 
 clean:
 	rm -f *.o $(NAME)
@@ -32,3 +32,6 @@ run: all
 
 check:
 	$(LINTER) *.c *.h
+
+memcheck: all
+	valgrind ./$(NAME)
