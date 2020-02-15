@@ -67,7 +67,10 @@ void shell(arguments *args)
 			free(lineptr);
 			return;
 		}
+		if (*lineptr == '\n')
+			continue;
 		args->tokarr = tokenise(lineptr);
+		builtins(args);
 		free(args->tokarr);
 	}
 }
@@ -78,6 +81,8 @@ void initparam(arguments *args, const int ac, char **av)
 	args->av = av;
 	args->exitchr = '\0';
 	args->tokarr = NULL;
+	args->head = NULL;
+	args->exit_status = 0;
 }
 
 int main(int ac, char *av[])

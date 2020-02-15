@@ -8,38 +8,83 @@
  */
 int changedir(arguments *args)
 {
-	char *cwd = NULL, *temp = NULL;
-	char *oldwd = NULL;
-	int val = 0;
-	char *home = _getenv("HOME=", args);
+	(void) args;
+	/* char *cwd = NULL, *temp = NULL; */
+	/* char *oldwd = NULL; */
+	/* int val = 0; */
+	/* char *home = _getenv("HOME=", args); */
 
-	oldwd = getcwd(oldwd, 0);
-	if (args->arr[1] == NULL)
+	/* oldwd = getcwd(oldwd, 0); */
+	/* if (args->tokarr[1] == NULL) */
+	/* { */
+	/* 	val = chdir(home ? home : oldwd); */
+	/* } */
+	/* else if (*args->tokarr[1] == '-') */
+	/* { */
+	/* 	val = chdir(_getenv("OLDPWD=", args) ? _getenv("OLDPWD=", args) : oldwd); */
+	/* 	_puts(getcwd(temp, 0)), _puts("\n"), free(temp); */
+	/* } */
+	/* else */
+	/* 	val = chdir(args->tokarr[1]); */
+	/* if (val == -1) */
+	/* { */
+	/* 	errno = 0; */
+	/* 	error(args, 3); */
+	/* } */
+	/* if (1) */
+	/* { */
+	/* 	args->tokarr[1] = "OLDPWD", args->tokarr[2] = oldwd; */
+	/* 	_setenv(args); */
+	/* 	args->tokarr[1] = "PWD", args->tokarr[2] = cwd = getcwd(cwd, 0); */
+	/* 	_setenv(args); */
+	/* 	free(cwd); */
+	/* } */
+	/* free(oldwd); */
+	return (1);
+}
+
+/**
+ * callexit - Changes directory
+ * @args: Arguments structure
+ *
+ * Return: 1 on success
+ */
+int penv(arguments *args)
+{
+	(void) args;
+	return (0);
+}
+
+/**
+ * callexit - Changes directory
+ * @args: Arguments structure
+ *
+ * Return: 1 on success
+ */
+int callexit(arguments *args)
+{
+	int number = 0;
+
+	if (args->tokarr[1])
 	{
-		val = chdir(home ? home : oldwd);
-	}
-	else if (*args->arr[1] == '-')
-	{
-		val = chdir(_getenv("OLDPWD=", args) ? _getenv("OLDPWD=", args) : oldwd);
-		_puts(getcwd(temp, 0)), _puts("\n"), free(temp);
+		number = _atoi(args->tokarr[1]);
+		if (number == -1)
+		{
+			/* errno = ILLNUM; */
+			/* error(args, 21); */
+			/* args->exit_status = 2; */
+			/* return (1); */
+			printf("Error\n");
+		}
 	}
 	else
-		val = chdir(args->arr[1]);
-	if (val == -1)
 	{
-		errno = NOTDIR;
-		error(args, 3);
+		number = args->exit_status;
 	}
-	if (1)
-	{
-		args->arr[1] = "OLDPWD", args->arr[2] = oldwd;
-		_setenv(args);
-		args->arr[1] = "PWD", args->arr[2] = cwd = getcwd(cwd, 0);
-		_setenv(args);
-		free(cwd);
-	}
-	free(oldwd);
-	return (1);
+	/* Make this a function? */
+	free(*args->tokarr);
+	free(args->tokarr);
+	exit(number);
 }
 
 int builtins(arguments *args)
@@ -49,7 +94,7 @@ int builtins(arguments *args)
 		{"cd", changedir},
 		{"env", penv},
 		{"exit", callexit},
-		(NULL, NULL)
+		{NULL, NULL}
 	};
 
 	for (i = 0; func_arr[i].bi; ++i)
@@ -57,4 +102,3 @@ int builtins(arguments *args)
 			return (func_arr[i].f(args));
 	return (0);
 }
-
