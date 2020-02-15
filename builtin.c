@@ -73,8 +73,8 @@ int callexit(arguments *args)
 			/* errno = ILLNUM; */
 			/* error(args, 21); */
 			/* args->exit_status = 2; */
-			/* return (1); */
 			printf("Error\n");
+			return (1);
 		}
 	}
 	else
@@ -87,6 +87,22 @@ int callexit(arguments *args)
 	exit(number);
 }
 
+/**
+ * clear_scr - Clears screen
+ * @args: Arguments structure
+ *
+ * Return: 0 on success, may not work on some systems
+ */
+int clear_scr(arguments *args)
+{
+	char *clr = "\033[2J";
+	char *move = "\033[1;1H";
+
+	(void) args;
+	printf("%s%s", move, clr);
+	return (0);
+}
+
 int builtins(arguments *args)
 {
 	size_t i;
@@ -94,6 +110,7 @@ int builtins(arguments *args)
 		{"cd", changedir},
 		{"env", penv},
 		{"exit", callexit},
+		{"clear", clear_scr},
 		{NULL, NULL}
 	};
 
