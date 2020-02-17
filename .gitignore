@@ -39,3 +39,8 @@ hsh
 
 # Shell tester
 shell_v2_checker
+
+simple_shell/
+exercises/
+tags
+vgcore*

@@ -1,6 +1,6 @@
 # Make file for shell v2 project at Holberton school
 # List of variables
-SHELL = /bin/zsh
+SHELL = /bin/bash
 CC = gcc
 CFLAGS = -Wall -Werror -Wextra -pedantic -std=gnu89 -g
 # name of the executable
@@ -22,7 +22,7 @@ all: $(NAME)
 $(NAME): $(OBJ)
 	$(CC) -o $@ $^ $(CFLAGS)
 
-.PHONY: clean, run, check, memcheck
+.PHONY: clean, run, check, memcheck, memfull, test
 
 clean:
 	rm -f *.o $(NAME)
@@ -36,3 +36,9 @@ check:
 
 memcheck: all
 	@valgrind ./$(NAME)
+
+memfull: all
+	@valgrind --leak-check=full --track-origins=yes ./$(NAME)
+
+test: all
+	cp $(NAME) shell_v2_checker/ && cd shell_v2_checker && ./start.bash
