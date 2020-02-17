@@ -1,5 +1,28 @@
 #include "shell.h"
 
+void cleanup(arguments *args, char mode)
+{
+	list *tmp;
+
+	if (mode == 'L')
+	{
+		free(args->tokarr);
+		return;
+	}
+	if (args->tokarr)
+		free(*args->tokarr);
+	free(args->tokarr);
+	args->tokarr = NULL;
+	while (args->env)
+	{
+		tmp = args->env;
+		args->env = args->env->next;
+		free(tmp->str);
+		free(tmp);
+	}
+	args->env = NULL;
+}
+
 size_t wordcount(char *lineptr)
 {
 	size_t i, wc, word;
@@ -37,6 +60,11 @@ char **tokenise(char *lineptr)
 		token = strtok(NULL, " \t\n");
 	}
 	arr[i] = NULL;
+	if (!i)
+	{
+		free(arr);
+		arr = NULL;
+	}
 	return (arr);
 }
 
@@ -67,11 +95,11 @@ void shell(arguments *args)
 			free(lineptr);
 			return;
 		}
-		if (*lineptr == '\n')
-			continue;
 		args->tokarr = tokenise(lineptr);
+		if (!args->tokarr)
+			continue;
 		builtins(args);
-		free(args->tokarr);
+		cleanup(args, 'L');
 	}
 }
 
@@ -81,7 +109,7 @@ void initparam(arguments *args, const int ac, char **av)
 	args->av = av;
 	args->exitchr = '\0';
 	args->tokarr = NULL;
-	args->head = NULL;
+	args->env = envlist();
 	args->exit_status = 0;
 }
 
@@ -90,5 +118,6 @@ int main(int ac, char *av[])
 	arguments args;
 	initparam(&args, ac, av);
 	shell(&args);
+	cleanup(&args, '\0');
 	return (EXIT_SUCCESS);
 }

@@ -51,7 +51,12 @@ int changedir(arguments *args)
  */
 int penv(arguments *args)
 {
-	(void) args;
+	list *cur = args->env;
+
+	while (cur) {
+		printf("%s\n", cur->str);
+		cur = cur->next;
+	}
 	return (0);
 }
 
@@ -81,9 +86,7 @@ int callexit(arguments *args)
 	{
 		number = args->exit_status;
 	}
-	/* Make this a function? */
-	free(*args->tokarr);
-	free(args->tokarr);
+	cleanup(args, '\0');
 	exit(number);
 }
 

@@ -5,16 +5,14 @@
  *
  * Return: Pointer to first node
  */
-list *arrtol(void)
+list *envlist(void)
 {
-	int i = 0;
+	int i;
 	list *head = NULL;
 
-	while (environ[i])
-	{
-		add_node_end(&head, environ[i]);
-		++i;
-	}
+	for (i = 0; environ[i]; ++i)
+		if (!add_node_end(&head, environ[i]))
+			return (NULL);
 	return (head);
 }
 
@@ -28,7 +26,7 @@ list *arrtol(void)
 char *_getenv(char *name, arguments *args)
 {
 	size_t len = _strlen(name);
-	list *head = args->head;
+	list *head = args->env;
 
 	while (head)
 	{

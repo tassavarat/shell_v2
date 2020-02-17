@@ -37,7 +37,7 @@ typedef struct arguments
 	char **av;
 	char exitchr;
 	char **tokarr;
-	list *head;
+	list *env;
 	int exit_status;
 } arguments;
 
@@ -54,6 +54,9 @@ typedef struct built_ins
 	int (*f)(arguments *args);
 } built_ins;
 
+/* shell */
+void cleanup(arguments *args, char mode);
+
 /* string */
 int _strcmp(char *s1, char *s2);
 int _strncmp(const char *s1, const char *s2, size_t n);
@@ -63,6 +66,8 @@ int _atoi(char *s);
 
 /* environment */
 char *_getenv(char *name, arguments *args);
+list *envlist(void);
+
 /* linked_list */
 list *add_node_end(list **head, const char *str);
 
