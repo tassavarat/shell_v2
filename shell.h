@@ -63,6 +63,8 @@ int _strncmp(const char *s1, const char *s2, size_t n);
 size_t _strlen(char *str);
 char *_strdup(const char *str);
 int _atoi(char *s);
+char *_strcat(char *dest, char *src);
+char *_strchr(char *s, char c);
 
 /* environment */
 char *_getenv(char *name, arguments *args);

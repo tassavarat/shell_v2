@@ -1,6 +1,92 @@
 #include "shell.h"
 
 /**
+ * _unsetenv - Unsets the specified environment variable
+ * @args: Arugements structure
+ * Return: 1 on success
+ */
+int _unsetenv(arguments *args)
+{
+	list *tmp, *prev;
+	char *p;
+	size_t /*i = 0,*/ len;
+
+	if (!args->tokarr[1])
+	{
+		/* error(args, 1); */
+		perror("perror called in _unsetenv");
+		return (1);
+	}
+	tmp = prev = args->env;
+	len = _strlen(args->tokarr[1]);
+	while (tmp)
+	{
+		p = _strchr(tmp->str, '=');
+		/* args->index = i; */
+		if (len == (size_t ) (p - tmp->str) &&
+				!(_strncmp(tmp->str, args->tokarr[1], len)))
+		{
+			/* delete_node_at_index(&(args->head), i); */
+			prev->next = tmp->next;
+			free(tmp);
+			break;
+		}
+		prev = tmp;
+		tmp = tmp->next;
+		/* ++i; */
+	}
+	return (0);
+}
+
+/**
+ * _setenv - Sets specified enviroment variable
+ * @args: Arguments structure
+ *
+ * Return: 1 on success
+ */
+int _setenv(arguments *args)
+{
+	char *variable = NULL, *value = NULL;
+	char tmp[PATH_MAX] = {0};
+
+	if (args->tokarr[1] && args->tokarr[2])
+	{
+		variable = args->tokarr[1];
+		value = args->tokarr[2];
+		_unsetenv(args);
+		_strcat(tmp, variable);
+		_strcat(tmp, "=");
+		_strcat(tmp, value);
+		/* add_node_end(&(args->head), tmp); */
+		insert_node_at_index(&(args->head), args->index, tmp);
+		return (1);
+	}
+	error(args, 1);
+	return (1);
+}
+
+int parsecd(arguments *args)
+{
+	int val;
+	char *home = _getenv("HOME=", args), *oldpw = _getenv("OLDPWD=", args);
+	char *tmp = NULL;
+
+	if (args->tokarr[1] == NULL && home)
+	{
+		val = chdir(home);
+	}
+	else if (*args->tokarr[1] == '-' && oldpw)
+	{
+		val = chdir(oldpw);
+		printf("%s\n", getcwd(tmp, 0));
+		free(tmp);
+	}
+	else
+		val = chdir(args->tokarr[1]);
+	return (val);
+}
+
+/**
  * custom_cd - Changes directory
  * @args: Arguments structure
  *
@@ -8,38 +94,21 @@
  */
 int changedir(arguments *args)
 {
-	(void) args;
-	/* char *cwd = NULL, *temp = NULL; */
-	/* char *oldwd = NULL; */
-	/* int val = 0; */
-	/* char *home = _getenv("HOME=", args); */
+	char *nwd = NULL, *cwd = NULL;
 
-	/* oldwd = getcwd(oldwd, 0); */
-	/* if (args->tokarr[1] == NULL) */
-	/* { */
-	/* 	val = chdir(home ? home : oldwd); */
-	/* } */
-	/* else if (*args->tokarr[1] == '-') */
-	/* { */
-	/* 	val = chdir(_getenv("OLDPWD=", args) ? _getenv("OLDPWD=", args) : oldwd); */
-	/* 	_puts(getcwd(temp, 0)), _puts("\n"), free(temp); */
-	/* } */
-	/* else */
-	/* 	val = chdir(args->tokarr[1]); */
-	/* if (val == -1) */
-	/* { */
-	/* 	errno = 0; */
-	/* 	error(args, 3); */
-	/* } */
-	/* if (1) */
-	/* { */
-	/* 	args->tokarr[1] = "OLDPWD", args->tokarr[2] = oldwd; */
-	/* 	_setenv(args); */
-	/* 	args->tokarr[1] = "PWD", args->tokarr[2] = cwd = getcwd(cwd, 0); */
-	/* 	_setenv(args); */
-	/* 	free(cwd); */
-	/* } */
-	/* free(oldwd); */
+	cwd = getcwd(cwd, 0);
+	if (parsecd(args) == -1)
+	{
+		errno = 0;
+		perror("perror called in changedir");
+		/* error(args, 3); */
+	}
+	args->tokarr[1] = "OLDPWD", args->tokarr[2] = cwd;
+	_setenv(args);
+	args->tokarr[1] = "PWD", args->tokarr[2] = nwd = getcwd(nwd, 0);
+	_setenv(args);
+	free(nwd);
+	free(cwd);
 	return (1);
 }
 
