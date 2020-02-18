@@ -7,36 +7,79 @@
  */
 int _unsetenv(arguments *args)
 {
-	list *tmp, *prev;
+	list *tmp, *prev = NULL;
 	char *p;
-	size_t /*i = 0,*/ len;
+	size_t len;
 
 	if (!args->tokarr[1])
 	{
-		/* error(args, 1); */
 		perror("perror called in _unsetenv");
 		return (1);
 	}
-	tmp = prev = args->env;
+	tmp = args->env;
 	len = _strlen(args->tokarr[1]);
 	while (tmp)
 	{
 		p = _strchr(tmp->str, '=');
-		/* args->index = i; */
 		if (len == (size_t ) (p - tmp->str) &&
-				!(_strncmp(tmp->str, args->tokarr[1], len)))
+		    !(_strncmp(tmp->str, args->tokarr[1], len)))
 		{
-			/* delete_node_at_index(&(args->head), i); */
-			prev->next = tmp->next;
+			if (prev)
+				prev->next = tmp->next;
+			else
+				args->env = tmp->next;
+			free(tmp->str);
 			free(tmp);
 			break;
 		}
 		prev = tmp;
 		tmp = tmp->next;
-		/* ++i; */
 	}
 	return (0);
 }
+
+/**
+ * set_environment - Sets specified enviroment variable
+ * @env: Environment list
+ * @name: Name of the environment
+ * @value: Value of the @name
+ * Return: Nothing
+ */
+void set_environment(list **env, char *name, char *value)
+{
+	list *tmp, *prev;
+	char *p = NULL;
+	char buf[PATH_MAX] = {0};
+	size_t len;
+
+	tmp = prev = *env;
+	len = _strlen(name);
+	while (tmp)
+	{
+		p = _strchr(tmp->str, '=');
+		if (len == (size_t ) (p - tmp->str) &&
+		    !(_strncmp(tmp->str, name, len)))
+			break;
+		prev = tmp;
+		tmp = tmp->next;
+	}
+	sprintf(buf, "%s=%s", name, value);
+	if (tmp)
+	{
+		free(tmp->str);
+	}
+	else
+	{
+		tmp = malloc(sizeof(*tmp)); /*Check  malloc?*/
+		tmp->next = NULL;
+	}
+	if (prev)
+		prev->next = tmp;
+	else
+		*env = tmp;
+	tmp->str = _strdup(buf);
+}
+
 
 /**
  * _setenv - Sets specified enviroment variable
@@ -46,28 +89,18 @@ int _unsetenv(arguments *args)
  */
 int _setenv(arguments *args)
 {
-	char *variable = NULL, *value = NULL;
-	char tmp[PATH_MAX] = {0};
-
 	if (args->tokarr[1] && args->tokarr[2])
 	{
-		variable = args->tokarr[1];
-		value = args->tokarr[2];
-		_unsetenv(args);
-		_strcat(tmp, variable);
-		_strcat(tmp, "=");
-		_strcat(tmp, value);
-		/* add_node_end(&(args->head), tmp); */
-		insert_node_at_index(&(args->head), args->index, tmp);
-		return (1);
+		set_environment(&(args->env), args->tokarr[1], args->tokarr[2]);
+		return (0);
 	}
-	error(args, 1);
+	perror("perror called in _setenv");
 	return (1);
 }
 
 int parsecd(arguments *args)
 {
-	int val;
+	int val = 0;
 	char *home = _getenv("HOME=", args), *oldpw = _getenv("OLDPWD=", args);
 	char *tmp = NULL;
 
@@ -78,10 +111,11 @@ int parsecd(arguments *args)
 	else if (*args->tokarr[1] == '-' && oldpw)
 	{
 		val = chdir(oldpw);
-		printf("%s\n", getcwd(tmp, 0));
+		tmp = getcwd(tmp, 0);
+		printf("%s\n", tmp);
 		free(tmp);
 	}
-	else
+	else if (args->tokarr[1] && *args->tokarr[1] != '-')
 		val = chdir(args->tokarr[1]);
 	return (val);
 }
@@ -103,10 +137,9 @@ int changedir(arguments *args)
 		perror("perror called in changedir");
 		/* error(args, 3); */
 	}
-	args->tokarr[1] = "OLDPWD", args->tokarr[2] = cwd;
-	_setenv(args);
-	args->tokarr[1] = "PWD", args->tokarr[2] = nwd = getcwd(nwd, 0);
-	_setenv(args);
+	nwd = getcwd(nwd, 0);
+	set_environment(&(args->env), "OLDPWD", cwd);
+	set_environment(&(args->env), "PWD", nwd);
 	free(nwd);
 	free(cwd);
 	return (1);
@@ -183,6 +216,8 @@ int builtins(arguments *args)
 		{"env", penv},
 		{"exit", callexit},
 		{"clear", clear_scr},
+		{"setenv", _setenv},
+		{"unsetenv", _unsetenv},
 		{NULL, NULL}
 	};
 
