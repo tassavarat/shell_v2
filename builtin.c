@@ -47,12 +47,12 @@ int _unsetenv(arguments *args)
  */
 void set_environment(list **env, char *name, char *value)
 {
-	list *tmp, *prev;
+	list *tmp, *prev = NULL;
 	char *p = NULL;
 	char buf[PATH_MAX] = {0};
 	size_t len;
 
-	tmp = prev = *env;
+	tmp = *env;
 	len = _strlen(name);
 	while (tmp)
 	{
@@ -75,7 +75,7 @@ void set_environment(list **env, char *name, char *value)
 	}
 	if (prev)
 		prev->next = tmp;
-	else
+	else if (!*env)
 		*env = tmp;
 	tmp->str = _strdup(buf);
 }
@@ -104,18 +104,20 @@ int parsecd(arguments *args)
 	char *home = _getenv("HOME=", args), *oldpw = _getenv("OLDPWD=", args);
 	char *tmp = NULL;
 
-	if (args->tokarr[1] == NULL && home)
+	if (args->tokarr[1] == NULL)
 	{
-		val = chdir(home);
+		if (home)
+			val = chdir(home);
 	}
-	else if (*args->tokarr[1] == '-' && oldpw)
+	else if (*args->tokarr[1] == '-')
 	{
-		val = chdir(oldpw);
+		if (oldpw)
+			val = chdir(oldpw);
 		tmp = getcwd(tmp, 0);
 		printf("%s\n", tmp);
 		free(tmp);
 	}
-	else if (args->tokarr[1] && *args->tokarr[1] != '-')
+	else
 		val = chdir(args->tokarr[1]);
 	return (val);
 }
