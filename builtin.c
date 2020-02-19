@@ -137,6 +137,7 @@ int changedir(arguments *args)
 	{
 		/* errno = 0; */
 		/* perror("perror called in changedir"); */
+		args->CERRNO = CDERR;
 		error(args);
 	}
 	nwd = getcwd(nwd, 0);
