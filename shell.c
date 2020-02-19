@@ -1,5 +1,17 @@
 #include "shell.h"
 
+/**
+ * error - display errors
+ * @args: command from user
+ */
+void error(arguments *args)
+{
+	(void) args;
+	if (args->CERRNO == CDERR)
+		perror("cd error");
+		/* fprintf(stderr, "%s: %lu: %s: can't\n", *args->av + 2, args->cmdnum, *args->tokarr); */
+}
+
 void cleanup(arguments *args, char mode)
 {
 	list *tmp;
@@ -98,8 +110,11 @@ void shell(arguments *args)
 		args->tokarr = tokenise(lineptr);
 		if (!args->tokarr)
 			continue;
-		builtins(args);
+		/* 0 success, 1 fail, 2 no built-in found */
+		if (builtins(args) == 2)
+			printf("Call fork here\n");
 		cleanup(args, 'L');
+		++args->cmdnum;
 	}
 }
 
@@ -111,6 +126,8 @@ void initparam(arguments *args, const int ac, char **av)
 	args->tokarr = NULL;
 	args->env = envlist();
 	args->exit_status = 0;
+	args->cmdnum = 1;
+	args->CERRNO = 0;
 }
 
 int main(int ac, char *av[])

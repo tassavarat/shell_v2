@@ -17,6 +17,8 @@
 #include <time.h>
 #include <unistd.h>
 
+#define CDERR 111
+
 /**
  * struct list_s - singly linked list
  * @str: string - (malloc'ed string)
@@ -39,6 +41,8 @@ typedef struct arguments
 	char **tokarr;
 	list *env;
 	int exit_status;
+	size_t cmdnum;
+	size_t CERRNO;
 } arguments;
 
 extern char **environ;
@@ -56,6 +60,7 @@ typedef struct built_ins
 
 /* shell */
 void cleanup(arguments *args, char mode);
+void error(arguments *args);
 
 /* string */
 int _strcmp(char *s1, char *s2);

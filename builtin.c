@@ -135,9 +135,9 @@ int changedir(arguments *args)
 	cwd = getcwd(cwd, 0);
 	if (parsecd(args) == -1)
 	{
-		errno = 0;
-		perror("perror called in changedir");
-		/* error(args, 3); */
+		/* errno = 0; */
+		/* perror("perror called in changedir"); */
+		error(args);
 	}
 	nwd = getcwd(nwd, 0);
 	set_environment(&(args->env), "OLDPWD", cwd);
@@ -226,5 +226,5 @@ int builtins(arguments *args)
 	for (i = 0; func_arr[i].bi; ++i)
 		if (!_strcmp(*args->tokarr, func_arr[i].bi))
 			return (func_arr[i].f(args));
-	return (0);
+	return (2);
 }
