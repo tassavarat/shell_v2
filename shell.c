@@ -22,6 +22,7 @@ void cleanup(arguments *args, char mode)
 	if (mode == 'L')
 	{
 		free(args->tokarr);
+		args->tokarr = NULL;
 		return;
 	}
 	if (args->tokarr)
