@@ -85,4 +85,7 @@ int _unsetenv(arguments *args);
 void set_environment(list **env, char *name, char *value);
 int parsecd(arguments *args);
 
+/* fork */
+char *get_path(arguments *args);
+void create_process(arguments *args);
 #endif /* SHELL_H */

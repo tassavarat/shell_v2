@@ -116,7 +116,7 @@ void shell(arguments *args)
 			continue;
 		/* 0 success, 1 fail, 2 no built-in found */
 		if (builtins(args) == 2)
-			printf("Call fork here\n");
+			create_process(args);
 		cleanup(args, 'L');
 		++args->cmdnum;
 	}
