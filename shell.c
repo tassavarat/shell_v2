@@ -44,7 +44,7 @@ size_t wordcount(char *lineptr)
 	size_t i, wc, word;
 
 	wc = word = 0;
-	for(i = 0; lineptr[i]; ++i)
+	for (i = 0; lineptr[i]; ++i)
 	{
 		if (!word && lineptr[i] != ' ')
 		{
@@ -136,6 +136,7 @@ void initparam(arguments *args, const int ac, char **av)
 int main(int ac, char *av[])
 {
 	arguments args;
+
 	initparam(&args, ac, av);
 	shell(&args);
 	cleanup(&args, '\0');

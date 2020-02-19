@@ -80,5 +80,9 @@ list *add_node_end(list **head, const char *str);
 
 /* builtins */
 int builtins(arguments *args);
+int _setenv(arguments *args);
+int _unsetenv(arguments *args);
+void set_environment(list **env, char *name, char *value);
+int parsecd(arguments *args);
 
 #endif /* SHELL_H */

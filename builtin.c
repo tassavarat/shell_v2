@@ -1,132 +1,10 @@
 #include "shell.h"
 
 /**
- * _unsetenv - Unsets the specified environment variable
- * @args: Arugements structure
- * Return: 1 on success
- */
-int _unsetenv(arguments *args)
-{
-	list *tmp, *prev = NULL;
-	char *p;
-	size_t len;
-
-	if (!args->tokarr[1])
-	{
-		perror("perror called in _unsetenv");
-		return (1);
-	}
-	tmp = args->env;
-	len = _strlen(args->tokarr[1]);
-	while (tmp)
-	{
-		p = _strchr(tmp->str, '=');
-		if (len == (size_t ) (p - tmp->str) &&
-		    !(_strncmp(tmp->str, args->tokarr[1], len)))
-		{
-			if (prev)
-				prev->next = tmp->next;
-			else
-				args->env = tmp->next;
-			free(tmp->str);
-			free(tmp);
-			break;
-		}
-		prev = tmp;
-		tmp = tmp->next;
-	}
-	return (0);
-}
-
-/**
- * set_environment - Sets specified enviroment variable
- * @env: Environment list
- * @name: Name of the environment
- * @value: Value of the @name
- * Return: Nothing
- */
-void set_environment(list **env, char *name, char *value)
-{
-	list *tmp, *prev = NULL;
-	char *p = NULL;
-	char buf[PATH_MAX] = {0};
-	size_t len;
-
-	tmp = *env;
-	len = _strlen(name);
-	while (tmp)
-	{
-		p = _strchr(tmp->str, '=');
-		if (len == (size_t ) (p - tmp->str) &&
-		    !(_strncmp(tmp->str, name, len)))
-			break;
-		prev = tmp;
-		tmp = tmp->next;
-	}
-	sprintf(buf, "%s=%s", name, value);
-	if (tmp)
-	{
-		free(tmp->str);
-	}
-	else
-	{
-		tmp = malloc(sizeof(*tmp)); /*Check  malloc?*/
-		tmp->next = NULL;
-	}
-	if (prev)
-		prev->next = tmp;
-	else if (!*env)
-		*env = tmp;
-	tmp->str = _strdup(buf);
-}
-
-
-/**
- * _setenv - Sets specified enviroment variable
+ * changedir - Changes directory
  * @args: Arguments structure
  *
- * Return: 1 on success
- */
-int _setenv(arguments *args)
-{
-	if (args->tokarr[1] && args->tokarr[2])
-	{
-		set_environment(&(args->env), args->tokarr[1], args->tokarr[2]);
-		return (0);
-	}
-	perror("perror called in _setenv");
-	return (1);
-}
-
-int parsecd(arguments *args)
-{
-	int val = 0;
-	char *home = _getenv("HOME=", args), *oldpw = _getenv("OLDPWD=", args);
-	char *tmp = NULL;
-
-	if (args->tokarr[1] == NULL)
-	{
-		if (home)
-			val = chdir(home);
-	}
-	else if (*args->tokarr[1] == '-')
-	{
-		if (oldpw)
-			val = chdir(oldpw);
-		tmp = getcwd(tmp, 0);
-		printf("%s\n", tmp);
-		free(tmp);
-	}
-	else
-		val = chdir(args->tokarr[1]);
-	return (val);
-}
-
-/**
- * custom_cd - Changes directory
- * @args: Arguments structure
- *
- * Return: 1 on success
+ * Return: 0 on success
  */
 int changedir(arguments *args)
 {
@@ -143,20 +21,21 @@ int changedir(arguments *args)
 	set_environment(&(args->env), "PWD", nwd);
 	free(nwd);
 	free(cwd);
-	return (1);
+	return (0);
 }
 
 /**
- * callexit - Changes directory
- * @args: Arguments structure
+ * penv - prints environment variables
+ * @args: arguments structure
  *
- * Return: 1 on success
+ * Return: 0 on success
  */
 int penv(arguments *args)
 {
 	list *cur = args->env;
 
-	while (cur) {
+	while (cur)
+	{
 		printf("%s\n", cur->str);
 		cur = cur->next;
 	}
@@ -164,10 +43,10 @@ int penv(arguments *args)
 }
 
 /**
- * callexit - Changes directory
- * @args: Arguments structure
+ * callexit - changes directory
+ * @args: arguments structure
  *
- * Return: 1 on success
+ * Return: 1 on failure, otherwise exit
  */
 int callexit(arguments *args)
 {
@@ -192,8 +71,8 @@ int callexit(arguments *args)
 }
 
 /**
- * clear_scr - Clears screen
- * @args: Arguments structure
+ * clear_scr - clears screen
+ * @args: arguments structure
  *
  * Return: 0 on success, may not work on some systems
  */
@@ -207,6 +86,12 @@ int clear_scr(arguments *args)
 	return (0);
 }
 
+/**
+ * builtins - calls appropriate built-ins
+ * @args: arguments structure
+ *
+ * Return: 0 on success, 1 built-in error, 2 no built-in found
+ */
 int builtins(arguments *args)
 {
 	size_t i;
