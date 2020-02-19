@@ -141,7 +141,11 @@ void create_process(arguments *args)
 	/* { */
 	/* 	exec = get_path(args); */
 	/* } */
-	exec = !_strncmp(args->tokarr[0], "./", 2) || **args->tokarr == '/'
+	/* exec = !_strncmp(args->tokarr[0], "./", 1) || **args->tokarr == '/' */
+	/* 	? args->tokarr[0] : get_path(args); */
+	exec = ((*args->tokarr)[0] == '.' &&
+		((*args->tokarr)[1] == '.' || (*args->tokarr)[1] == '/')) ||
+		**args->tokarr == '/'
 		? args->tokarr[0] : get_path(args);
 	if (!exec || access(exec, F_OK))
 	{
