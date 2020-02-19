@@ -135,9 +135,7 @@ int changedir(arguments *args)
 	cwd = getcwd(cwd, 0);
 	if (parsecd(args) == -1)
 	{
-		/* errno = 0; */
-		/* perror("perror called in changedir"); */
-		args->CERRNO = CDERR;
+		errno = CDERR;
 		error(args);
 	}
 	nwd = getcwd(nwd, 0);
@@ -180,10 +178,8 @@ int callexit(arguments *args)
 		number = _atoi(args->tokarr[1]);
 		if (number == -1)
 		{
-			/* errno = ILLNUM; */
-			/* error(args, 21); */
-			/* args->exit_status = 2; */
-			printf("Error\n");
+			errno = EXITERR;
+			error(args);
 			return (1);
 		}
 	}

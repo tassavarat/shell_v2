@@ -6,10 +6,13 @@
  */
 void error(arguments *args)
 {
-	(void) args;
-	if (args->CERRNO == CDERR)
-		perror("cd error");
-		/* fprintf(stderr, "%s: %lu: %s: can't\n", *args->av + 2, args->cmdnum, *args->tokarr); */
+	fprintf(stderr, "%s: ", *args->av + 2);
+	if (errno == EXITERR)
+		fprintf(stderr, "%lu: %s: Illegal number: %s\n", args->cmdnum,
+				*args->tokarr, args->tokarr[1]);
+	else if (errno == CDERR)
+		fprintf(stderr, "%lu: %s: can't cd to %s\n", args->cmdnum,
+				*args->tokarr, args->tokarr[1]);
 }
 
 void cleanup(arguments *args, char mode)
@@ -127,7 +130,6 @@ void initparam(arguments *args, const int ac, char **av)
 	args->env = envlist();
 	args->exit_status = 0;
 	args->cmdnum = 1;
-	args->CERRNO = 0;
 }
 
 int main(int ac, char *av[])

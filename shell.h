@@ -17,7 +17,8 @@
 #include <time.h>
 #include <unistd.h>
 
-#define CDERR 111
+#define EXITERR 100
+#define CDERR 101
 
 /**
  * struct list_s - singly linked list
@@ -42,7 +43,6 @@ typedef struct arguments
 	list *env;
 	int exit_status;
 	size_t cmdnum;
-	size_t CERRNO;
 } arguments;
 
 extern char **environ;
