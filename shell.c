@@ -6,13 +6,31 @@
  */
 void error(arguments *args)
 {
-	fprintf(stderr, "%s: ", *args->av + 2);
+	fprintf(stderr, "%s: %lu: ", *args->av + 2, args->cmdnum);
 	if (errno == EXITERR)
-		fprintf(stderr, "%lu: %s: Illegal number: %s\n", args->cmdnum,
-				*args->tokarr, args->tokarr[1]);
+	{
+		fprintf(stderr, "%s: Illegal number: %s\n", *args->tokarr,
+				args->tokarr[1]);
+		args->exit_status = 2;
+	}
 	else if (errno == CDERR)
-		fprintf(stderr, "%lu: %s: can't cd to %s\n", args->cmdnum,
-				*args->tokarr, args->tokarr[1]);
+	{
+		fprintf(stderr, "%s: can't cd to %s\n", *args->tokarr,
+				args->tokarr[1]);
+		args->exit_status = 2;
+	}
+	else if (errno == EACCES)
+	{
+		perror(NULL);
+		args->exit_status = 126;
+	}
+	else if (errno == ENOENT)
+	{
+		fprintf(stderr, "%s: not found\n", *args->tokarr);
+		args->exit_status = 127;
+	}
+	else
+		perror(NULL);
 }
 
 void cleanup(arguments *args, char mode)
@@ -140,5 +158,5 @@ int main(int ac, char *av[])
 	initparam(&args, ac, av);
 	shell(&args);
 	cleanup(&args, '\0');
-	return (EXIT_SUCCESS);
+	return (args.exit_status);
 }

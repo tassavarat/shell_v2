@@ -98,26 +98,28 @@ char *get_path(arguments *args)
 void _fork(arguments *args, char *exec)
 {
 	pid_t pid = 0;
+	int wstatus;
 
 	pid = fork();
 	if (pid < 0)
 	{
-		perror("Fork failed");
+
+		error(args);
 	}
 	else if (pid == 0)
 	{
 		if (execve(exec, args->tokarr, NULL))
 		{
-			perror("Execve failed");
+			error(args);
 			exit(errno);
 		}
 	}
 	else
 	{
-		wait(NULL);
-		/* waitpid(-1, &(args->status), 0); */
-		/* if (WIFEXITED(args->status)) */
-		/* 	args->exit_status = WEXITSTATUS(args->status); */
+
+		waitpid(-1, &wstatus, 0);
+		if (WIFEXITED(wstatus))
+			args->exit_status = WEXITSTATUS(wstatus);
 	}
 }
 
@@ -143,11 +145,11 @@ void create_process(arguments *args)
 		? args->tokarr[0] : get_path(args);
 	if (!exec || access(exec, F_OK))
 	{
-		perror("No such file, code = 127");
+		error(args);
 	}
 	else if (access(exec, X_OK | R_OK))
 	{
-		perror("Permission denied, code = 126");
+		error(args);
 	}
 	else
 	{
