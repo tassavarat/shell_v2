@@ -6,7 +6,7 @@
  */
 void error(arguments *args)
 {
-	fprintf(stderr, "%s: %lu: ", *args->av + 2, args->cmdnum);
+	fprintf(stderr, "%s: %lu: ", *args->av, args->cmdnum);
 	if (errno == EXITERR)
 	{
 		fprintf(stderr, "%s: Illegal number: %s\n", *args->tokarr,
@@ -109,7 +109,7 @@ void pprompt(arguments *args)
 	if (isatty(STDIN_FILENO))
 	{
 		printf("hsh$ ");
-		args->exitchr = '\n';
+		args->exitstr = "\n";
 	}
 }
 
@@ -125,7 +125,7 @@ void shell(arguments *args)
 		byterd = getline(&lineptr, &n, stdin);
 		if (byterd == EOF)
 		{
-			printf("%c", args->exitchr);
+			printf("%s", args->exitstr);
 			free(lineptr);
 			return;
 		}
@@ -144,7 +144,7 @@ void initparam(arguments *args, const int ac, char **av)
 {
 	args->ac = ac;
 	args->av = av;
-	args->exitchr = '\0';
+	args->exitstr = "";
 	args->tokarr = NULL;
 	args->env = envlist();
 	args->exit_status = 0;

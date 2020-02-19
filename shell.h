@@ -38,7 +38,7 @@ typedef struct arguments
 {
 	int ac;
 	char **av;
-	char exitchr;
+	char *exitstr;
 	char **tokarr;
 	list *env;
 	int exit_status;
