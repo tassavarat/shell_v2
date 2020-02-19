@@ -145,6 +145,7 @@ void create_process(arguments *args)
 		? args->tokarr[0] : get_path(args);
 	if (!exec || access(exec, F_OK))
 	{
+		errno = ENOENT;
 		error(args);
 	}
 	else if (access(exec, X_OK | R_OK))
