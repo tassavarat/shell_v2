@@ -21,12 +21,9 @@
 #define CDERR 101
 
 /**
- * struct list_s - singly linked list
+ * struct list - singly linked list
  * @str: string - (malloc'ed string)
  * @next: points to the next node
- *
- * Description: singly linked list node structure
- * for Holberton project
  */
 typedef struct list
 {
@@ -34,6 +31,16 @@ typedef struct list
 	struct list *next;
 } list;
 
+/**
+ * struct arguments - contains arguments used by functions
+ * @ac: number of arguments
+ * @av: array of argument strings
+ * @exitstr: string to print on shell exit
+ * @tokarr: tokenised array
+ * @env: head pointer to linked list
+ * @exit_status: exit value
+ * @cmdnum: current command number
+ */
 typedef struct arguments
 {
 	int ac;
@@ -90,4 +97,8 @@ int parsecd(arguments *args);
 /* fork */
 char *get_path(arguments *args);
 void create_process(arguments *args);
+
+/* parse */
+size_t wordcount(char *lineptr);
+
 #endif /* SHELL_H */
