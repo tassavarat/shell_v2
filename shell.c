@@ -33,6 +33,11 @@ void error(arguments *args)
 		perror(NULL);
 }
 
+/**
+ * cleanup - performs relevant cleanup for arguments structure
+ * @args: arguments structure
+ * @mode: if there is tokenised array to free
+ */
 void cleanup(arguments *args, char mode)
 {
 	list *tmp;
@@ -57,6 +62,12 @@ void cleanup(arguments *args, char mode)
 	args->env = NULL;
 }
 
+/**
+ * wordcount - counts number of words
+ * @lineptr: string to parse
+ *
+ * Return: number of words
+ */
 size_t wordcount(char *lineptr)
 {
 	size_t i, wc, word;
@@ -77,6 +88,12 @@ size_t wordcount(char *lineptr)
 	return (wc);
 }
 
+/**
+ * tokenise - tokenises lineptr
+ * @lineptr: string to tokenise
+ *
+ * Return: tokenised string
+ */
 char **tokenise(char *lineptr)
 {
 	char *token;
@@ -102,6 +119,10 @@ char **tokenise(char *lineptr)
 	return (arr);
 }
 
+/**
+ * pprompt - prints prompt
+ * @args: arguments structure
+ */
 void pprompt(arguments *args)
 {
 	(void) args;
@@ -113,6 +134,10 @@ void pprompt(arguments *args)
 	}
 }
 
+/**
+ * shell - gets input and calls relevant functions to parse
+ * @args: arguments structure
+ */
 void shell(arguments *args)
 {
 	char *lineptr = NULL;
@@ -132,7 +157,6 @@ void shell(arguments *args)
 		args->tokarr = tokenise(lineptr);
 		if (!args->tokarr)
 			continue;
-		/* 0 success, 1 fail, 2 no built-in found */
 		if (builtins(args) == 2)
 			create_process(args);
 		cleanup(args, 'L');
@@ -140,6 +164,12 @@ void shell(arguments *args)
 	}
 }
 
+/**
+ * initparam - initialises arguments structure
+ * @args: arguments structure to initialise
+ * @ac: number of arguments
+ * @av: arguments passed
+ */
 void initparam(arguments *args, const int ac, char **av)
 {
 	args->ac = ac;
@@ -151,6 +181,13 @@ void initparam(arguments *args, const int ac, char **av)
 	args->cmdnum = 1;
 }
 
+/**
+ * main - entry point
+ * @ac: number of arguments
+ * @av: arguments passed
+ *
+ * Return: exit status
+ */
 int main(int ac, char *av[])
 {
 	arguments args;

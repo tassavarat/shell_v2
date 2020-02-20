@@ -66,7 +66,6 @@ void forkproc(arguments *args, char *exec)
 	pid = fork();
 	if (pid < 0)
 	{
-
 		error(args);
 	}
 	else if (pid == 0)
