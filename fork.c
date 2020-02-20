@@ -1,46 +1,9 @@
 #include "shell.h"
 
 /**
- * _strncpy - copies string
- * @dest: takes string
- * @src: takes string
- * @n: takes number of bytes
- *
- * Return: pointer to dest
- */
-
-char *_strncpy(char *dest, char *src, int n)
-{
-	int i;
-
-	for (i = 0; src[i] != '\0' && i < n; i++)
-		dest[i] = src[i];
-	while (i < n)
-		dest[i++] = '\0';
-	return (dest);
-}
-
-/**
- * _memset - Fills memory with constant byte
- * @s: Array being filled
- * @b: Constant byte
- * @n: Amount of array elements to be filled with b
- *
- * Return: Filled buffer
- */
-char *_memset(char *s, char b, unsigned int n)
-{
-	unsigned int i;
-
-	for (i = 0; i < n; ++i)
-		s[i] = b;
-	return (s);
-}
-
-/**
- * get_path - Process
- * @args: Arugements structure
- * Return: Nothing
+ * split_path - describe me
+ * @str: string
+ * Return: dir
  */
 char *split_path(char *str)
 {
@@ -57,7 +20,8 @@ char *split_path(char *str)
 	if (!path || !*(path + cur_pos))
 		return (NULL);
 	for (new_pos = cur_pos; *(path + new_pos)
-		     && *(path + new_pos) != ':'; ++new_pos);
+		     && *(path + new_pos) != ':'; ++new_pos)
+		;
 	dir = malloc(sizeof(char) * (new_pos - cur_pos + 1));
 	_strncpy(dir, path + cur_pos, new_pos - cur_pos);
 	dir[new_pos - cur_pos] = '\0';
@@ -66,9 +30,9 @@ char *split_path(char *str)
 }
 
 /**
- * get_path - Process
- * @args: Arugements structure
- * Return: Nothing
+ * get_path - gets the path
+ * @args: arguments structure
+ * Return: full path on command, otherwise NULL
  */
 char *get_path(arguments *args)
 {
@@ -90,12 +54,11 @@ char *get_path(arguments *args)
 
 
 /**
- * _fork - Fork a process
- * @args: Arugements structure
- * @exec: Executable
- * Return: Nothing
+ * forkproc - fork a process
+ * @args: arguments structure
+ * @exec: executable
  */
-void _fork(arguments *args, char *exec)
+void forkproc(arguments *args, char *exec)
 {
 	pid_t pid = 0;
 	int wstatus;
@@ -116,7 +79,6 @@ void _fork(arguments *args, char *exec)
 	}
 	else
 	{
-
 		waitpid(-1, &wstatus, 0);
 		if (WIFEXITED(wstatus))
 			args->exit_status = WEXITSTATUS(wstatus);
@@ -125,24 +87,13 @@ void _fork(arguments *args, char *exec)
 
 
 /**
- * create_process - Process
- * @args: Arugements structure
- * Return: Nothing
+ * create_process - creates a process
+ * @args: arguments structure
  */
 void create_process(arguments *args)
 {
 	char *exec = NULL;
 
-	/* if (!_strncmp(args->tokarr[0], "./", 2) || **args->tokarr == '/') */
-	/* { */
-	/* 	exec = args->tokarr[0]; */
-	/* } */
-	/* else */
-	/* { */
-	/* 	exec = get_path(args); */
-	/* } */
-	/* exec = !_strncmp(args->tokarr[0], "./", 1) || **args->tokarr == '/' */
-	/* 	? args->tokarr[0] : get_path(args); */
 	exec = ((*args->tokarr)[0] == '.' &&
 		((*args->tokarr)[1] == '.' || (*args->tokarr)[1] == '/')) ||
 		**args->tokarr == '/'
@@ -158,6 +109,6 @@ void create_process(arguments *args)
 	}
 	else
 	{
-		_fork(args, exec);
+		forkproc(args, exec);
 	}
 }

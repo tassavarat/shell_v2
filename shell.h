@@ -70,6 +70,8 @@ char *_strdup(const char *str);
 int _atoi(char *s);
 char *_strcat(char *dest, char *src);
 char *_strchr(char *s, char c);
+char *_memset(char *s, char b, unsigned int n);
+char *_strncpy(char *dest, char *src, int n);
 
 /* environment */
 char *_getenv(char *name, arguments *args);
