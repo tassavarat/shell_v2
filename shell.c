@@ -60,7 +60,7 @@ void shell(arguments *args)
 	{
 		pprompt(args);
 		byterd = getline(&lineptr, &n, stdin);
-		if (byterd == EOF)
+		if (byterd == EOF || syntaxerr(lineptr))
 		{
 			printf("%s", args->exitstr);
 			free(lineptr);
@@ -91,6 +91,7 @@ void initparam(arguments *args, const int ac, char **av)
 	args->env = envlist();
 	args->exit_status = 0;
 	args->cmdnum = 1;
+	args->errstr = "";
 }
 
 /**

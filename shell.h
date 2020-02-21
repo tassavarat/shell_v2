@@ -50,6 +50,7 @@ typedef struct arguments
 	list *env;
 	int exit_status;
 	size_t cmdnum;
+	char *errstr;
 } arguments;
 
 extern char **environ;
@@ -100,5 +101,6 @@ void create_process(arguments *args);
 
 /* parse */
 size_t wordcount(char *lineptr);
+int syntaxerr(char *lineptr);
 
 #endif /* SHELL_H */
