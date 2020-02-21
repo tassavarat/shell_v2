@@ -46,6 +46,48 @@ void pprompt(arguments *args)
 	}
 }
 
+
+void shell_run(arguments *args, char *lineptr)
+{
+	args->tokarr = tokenise(lineptr);
+	if (!args->tokarr)
+		return;
+	if (builtins(args) == 2)
+		create_process(args);
+	cleanup(args, 'L');
+}
+
+void parse_operators(arguments *args, char *lineptr)
+{
+	char dquote, squote;
+	size_t i, line_pos = 0;
+
+	squote = dquote = 0;
+	for (i = 0; lineptr[i]; ++i)
+	{
+		/* Handling escape character  echo "\"Timmy\""  */
+		squote = lineptr[i] == '\'' && (i == 0 || lineptr[i - 1] != '\\') ? ~squote : squote;
+		dquote = lineptr[i] == '"' && (i == 0 || lineptr[i - 1] != '\\') ? ~dquote : dquote;
+		if (!squote && !dquote)
+		{
+			if (lineptr[i] == '#' && (i == 0 || lineptr[i - 1] == ' '))
+			{
+				lineptr[i] = '\0'; /* This handles the comments*/
+				shell_run(args, lineptr + line_pos);
+				return;
+			}
+			if (lineptr[i] == ';')
+			{
+				lineptr[i] = '\0';
+				shell_run(args, lineptr + line_pos);
+				line_pos = ++i;
+			}
+
+		}
+	}
+	shell_run(args, lineptr + line_pos); /* Default behaviour */
+}
+
 /**
  * shell - gets input and calls relevant functions to parse
  * @args: arguments structure
@@ -66,13 +108,8 @@ void shell(arguments *args)
 			free(lineptr);
 			return;
 		}
-		args->tokarr = tokenise(lineptr);
-		if (!args->tokarr)
-			continue;
-		if (builtins(args) == 2)
-			create_process(args);
-		cleanup(args, 'L');
 		++args->cmdnum;
+		parse_operators(args, lineptr);
 	}
 }
 
@@ -90,7 +127,7 @@ void initparam(arguments *args, const int ac, char **av)
 	args->tokarr = NULL;
 	args->env = envlist();
 	args->exit_status = 0;
-	args->cmdnum = 1;
+	args->cmdnum = 0;
 }
 
 /**
