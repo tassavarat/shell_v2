@@ -59,10 +59,11 @@ void shell_run(arguments *args, char *lineptr)
 
 void parse_operators(arguments *args, char *lineptr)
 {
-	char dquote, squote;
+	char dquote, squote, operator;
 	size_t i, line_pos = 0;
 
 	squote = dquote = 0;
+	operator = ';';
 	for (i = 0; lineptr[i]; ++i)
 	{
 		/* Handling escape character  echo "\"Timmy\""  */
@@ -79,13 +80,48 @@ void parse_operators(arguments *args, char *lineptr)
 			if (lineptr[i] == ';')
 			{
 				lineptr[i] = '\0';
-				shell_run(args, lineptr + line_pos);
-				line_pos = ++i;
+				if (operator == ';' || (operator == '&' && !args->exit_status)
+				    || (operator == '|' && args->exit_status))
+					shell_run(args, lineptr + line_pos);
+				    line_pos = ++i;
 			}
-
+			else if (lineptr[i] == '&')
+			{
+				if (lineptr[i + 1] == '&') /* if you hit the first &*/
+				{
+					lineptr[i] = '\0';
+					if (operator == ';' || (operator == '&' && !args->exit_status)
+					    || (operator == '|' && args->exit_status))
+						shell_run(args, lineptr + line_pos);
+					line_pos = i + 1;
+				}
+				else if (i != 0 && lineptr[i - 1] == '\0') /*if you hit second &*/
+				{
+					operator = '&';
+					line_pos = i + 1;
+				}
+			}
+			else if (lineptr[i] == '|')
+			{
+				if (lineptr[i + 1] == '|') /* if you hit the first &*/
+				{
+					lineptr[i] = '\0';
+					if (operator == ';' || (operator == '&' && !args->exit_status)
+					    || (operator == '|' && args->exit_status))
+						shell_run(args, lineptr + line_pos);
+					line_pos = i + 1;
+				}
+				else if (i != 0 && lineptr[i - 1] == '\0') /*if you hit second &*/
+				{
+					operator = '|';
+					line_pos = i + 1;
+				}
+			}
 		}
 	}
-	shell_run(args, lineptr + line_pos); /* Default behaviour */
+	if (operator == ';' || (operator == '&' && !args->exit_status)
+	    || (operator == '|' && args->exit_status))
+		shell_run(args, lineptr + line_pos); /* Default behaviour */
 }
 
 /**
