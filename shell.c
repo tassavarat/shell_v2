@@ -46,7 +46,14 @@ void pprompt(arguments *args)
 	}
 }
 
-char is_quote(char *lineptr, size_t i, char *quote)
+/**
+ * no_quote - checks if operators are outside quotes
+ * @lineptr: input string
+ * @i: cursor position in @lineptr
+ * @quote: bit field
+ * Return: 1 if it is safe to parse operator, 0 if it is not
+ */
+char no_quote(char *lineptr, size_t i, char *quote)
 {
 	*quote = lineptr[i] == '\'' && (i == 0 || lineptr[i - 1] != '\\') ?
 		*quote ^ 1 << 0 : *quote;
@@ -66,7 +73,7 @@ void check_redirection(arguments *args, char *lineptr, int *fds)
 	(void) args;
 	for (i = 0; lineptr[i]; ++i)
 	{
-		if (is_quote(lineptr, i, &quote))
+		if (no_quote(lineptr, i, &quote))
 		{
 			/* Handle ls; ls >> error */
 			if (lineptr[i] == '>')
@@ -114,17 +121,14 @@ void shell_run(arguments *args, char *lineptr)
 
 void parse_operators(arguments *args, char *lineptr)
 {
-	char dquote, squote, operator;
+	char quote, operator;
 	size_t i, line_pos = 0;
 
-	squote = dquote = 0;
+	quote = 0;
 	operator = ';';
 	for (i = 0; lineptr[i]; ++i)
 	{
-		/* Handling escape character  echo "\"Timmy\""  */
-		squote = lineptr[i] == '\'' && (i == 0 || lineptr[i - 1] != '\\') ? ~squote : squote;
-		dquote = lineptr[i] == '"' && (i == 0 || lineptr[i - 1] != '\\') ? ~dquote : dquote;
-		if (!squote && !dquote)
+		if (no_quote(lineptr, i, &quote))
 		{
 			if (lineptr[i] == '#' && (i == 0 || lineptr[i - 1] == ' '))
 			{
@@ -138,7 +142,7 @@ void parse_operators(arguments *args, char *lineptr)
 				if (operator == ';' || (operator == '&' && !args->exit_status)
 				    || (operator == '|' && args->exit_status))
 					shell_run(args, lineptr + line_pos);
-				    line_pos = ++i;
+				line_pos = i + 1;
 			}
 			else if (lineptr[i] == '&')
 			{
