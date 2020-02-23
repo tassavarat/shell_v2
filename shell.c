@@ -63,6 +63,12 @@ char no_quote(char *lineptr, size_t i, char *quote)
 	return (*quote == 0);
 }
 
+/**
+ * check_redirection - handles redirections
+ * @args: arguments
+ * @lineptr: input string
+ * @fds: file descriptors
+ */
 void check_redirection(arguments *args, char *lineptr, int *fds)
 {
 	char quote = 0;
@@ -90,6 +96,11 @@ void check_redirection(arguments *args, char *lineptr, int *fds)
 	}
 }
 
+/**
+ * shell_run - calls relevant functions to parse
+ * @args: arguments structure
+ * @lineptr: input string
+ */
 void shell_run(arguments *args, char *lineptr)
 {
 	int fds[3] = {-2, -2, STDOUT_FILENO};
@@ -107,7 +118,7 @@ void shell_run(arguments *args, char *lineptr)
 
 	args->tokarr = tokenise(lineptr);
 	if (!args->tokarr)
-		    return;
+		return;
 	if (builtins(args) == 2)
 		create_process(args);
 	cleanup(args, 'L');
@@ -119,62 +130,55 @@ void shell_run(arguments *args, char *lineptr)
 	}
 }
 
+
+/**
+ * is_comment - checks if # sign is comment
+ * @lineptr: input string
+ * @i: cursor position in @lineptr
+ * Return: 1 if it is comment, 0 if it is not
+ */
+int is_comment(char *lineptr, size_t i)
+{
+	if (lineptr[i] == '#' && (i == 0 || lineptr[i - 1] == ' '))
+	{
+		lineptr[i] = '\0';
+		return (1);
+	}
+	return (0);
+}
+
+/**
+ * parse_operators - parses logical operators
+ * Description:
+ * @args: arguments struct
+ * @lineptr: input string
+ */
 void parse_operators(arguments *args, char *lineptr)
 {
-	char quote, operator;
+	char quote = 0, operator = ';';
 	size_t i, line_pos = 0;
 
-	quote = 0;
-	operator = ';';
 	for (i = 0; lineptr[i]; ++i)
 	{
 		if (no_quote(lineptr, i, &quote))
 		{
-			if (lineptr[i] == '#' && (i == 0 || lineptr[i - 1] == ' '))
+			if (is_comment(lineptr, i))
+				break;
+			if ((lineptr[i] == '&' || lineptr[i] == '|')
+			    && i != 0 && lineptr[i - 1] == '\0')
 			{
-				lineptr[i] = '\0'; /* This handles the comments*/
-				shell_run(args, lineptr + line_pos);
-				return;
+				operator = lineptr[i]; /*Handles second & or | */
+				line_pos = i + 1;
 			}
-			if (lineptr[i] == ';')
+			else if (lineptr[i] == ';' ||
+				 !_strncmp(lineptr + i, "&&", 2) ||
+				 !_strncmp(lineptr + i, "||", 2))
 			{
 				lineptr[i] = '\0';
 				if (operator == ';' || (operator == '&' && !args->exit_status)
 				    || (operator == '|' && args->exit_status))
 					shell_run(args, lineptr + line_pos);
 				line_pos = i + 1;
-			}
-			else if (lineptr[i] == '&')
-			{
-				if (lineptr[i + 1] == '&') /* if you hit the first &*/
-				{
-					lineptr[i] = '\0';
-					if (operator == ';' || (operator == '&' && !args->exit_status)
-					    || (operator == '|' && args->exit_status))
-						shell_run(args, lineptr + line_pos);
-					line_pos = i + 1;
-				}
-				else if (i != 0 && lineptr[i - 1] == '\0') /*if you hit second &*/
-				{
-					operator = '&';
-					line_pos = i + 1;
-				}
-			}
-			else if (lineptr[i] == '|')
-			{
-				if (lineptr[i + 1] == '|') /* if you hit the first &*/
-				{
-					lineptr[i] = '\0';
-					if (operator == ';' || (operator == '&' && !args->exit_status)
-					    || (operator == '|' && args->exit_status))
-						shell_run(args, lineptr + line_pos);
-					line_pos = i + 1;
-				}
-				else if (i != 0 && lineptr[i - 1] == '\0') /*if you hit second &*/
-				{
-					operator = '|';
-					line_pos = i + 1;
-				}
 			}
 		}
 	}
