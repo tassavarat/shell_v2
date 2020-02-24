@@ -54,7 +54,7 @@ void shell(arguments *args)
 			free(lineptr);
 			return;
 		}
-		++args->cmdnum;
 		parse_operators(args, lineptr);
+		++args->cmdnum;
 	}
 }
