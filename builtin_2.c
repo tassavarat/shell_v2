@@ -31,7 +31,11 @@ int _unsetenv(arguments *args)
 	list *tmp, *prev = NULL;
 
 	if (!args->tokarr[1])
+	{
+		errno = ENVERR;
+		error(args);
 		return (1);
+	}
 	tmp = args->env;
 	while (tmp)
 	{
@@ -56,6 +60,8 @@ int _unsetenv(arguments *args)
  * @env: environment list
  * @name: name of the environment
  * @value: value of the @name
+ *
+ * Return: 0 on success, otherwise 1
  */
 int set_environment(list **env, char *name, char *value)
 {
@@ -99,10 +105,18 @@ int set_environment(list **env, char *name, char *value)
  */
 int _setenv(arguments *args)
 {
-	int stat;
+	int stat = 0;
 
 	if (args->tokarr[1] && args->tokarr[2])
+	{
 		stat = set_environment(&(args->env), args->tokarr[1], args->tokarr[2]);
+	}
+	else
+	{
+		stat = 1;
+		errno = ENVERR;
+		error(args);
+	}
 	return (stat);
 }
 

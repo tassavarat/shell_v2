@@ -19,6 +19,7 @@
 
 #define EXITERR 100
 #define CDERR 101
+#define ENVERR 102
 
 /**
  * struct list - singly linked list

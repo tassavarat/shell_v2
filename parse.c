@@ -125,6 +125,11 @@ void error(arguments *args)
 		fprintf(stderr, "%s: not found\n", *args->tokarr);
 		args->exit_status = 127;
 	}
+	else if (errno == ENVERR)
+	{
+		fprintf(stderr, "%s: invalid argument(s)\n", *args->tokarr);
+		args->exit_status = 127;
+	}
 	else
 		perror(NULL);
 }

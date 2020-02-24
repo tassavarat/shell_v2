@@ -27,7 +27,7 @@ void pprompt(arguments *args)
 
 	if (isatty(STDIN_FILENO))
 	{
-		printf("hsh$ ");
+		fprintf(stderr, "$ ");
 		args->exitstr = "\n";
 	}
 }
