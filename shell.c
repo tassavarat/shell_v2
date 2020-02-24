@@ -64,6 +64,16 @@ char no_quote(char *lineptr, size_t i, char *quote)
 }
 
 /**
+ * is_digit - checks if char @n is digit
+ * @n: character
+ * Return: 1 if @n is digit, 0 if not
+ */
+int is_digit(char n)
+{
+	return (n >= '0' && n <= '9' ? 1 : 0);
+}
+
+/**
  * check_redirection - handles redirections
  * @args: arguments
  * @lineptr: input string
@@ -81,15 +91,20 @@ void check_redirection(arguments *args, char *lineptr, int *fds)
 	{
 		if (no_quote(lineptr, i, &quote))
 		{
-			/* Handle ls; ls >> error */
+			/* TODO: Handle ls; ls >> error */
 			if (lineptr[i] == '>')
 			{
+				if (i != 0 && is_digit(lineptr[i - 1]))
+				{
+					fds[2] = lineptr[i - 1] - '0';
+					lineptr[i - 1] = '\0';
+				}
 				lineptr[i++] = '\0';
 				if (lineptr[i] == '>')
 					++i, flags |= O_APPEND;
 				file = strtok(lineptr + i, " \n");
 				fds[0] = open(file, flags, 0664);
-				fds[1] = dup(STDOUT_FILENO);
+				fds[1] = dup(fds[2]);
 				break;
 			}
 		}
@@ -124,7 +139,7 @@ void shell_run(arguments *args, char *lineptr)
 	cleanup(args, 'L');
 	if (fds[0] != -2)
 	{
-		if (dup2(fds[1], 1) == -1)
+		if (dup2(fds[1], fds[2]) == -1)
 			error(args);
 		close(fds[0]);
 	}
