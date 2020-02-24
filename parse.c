@@ -128,7 +128,7 @@ void error(arguments *args)
 	else if (errno == ENVERR)
 	{
 		fprintf(stderr, "%s: invalid argument(s)\n", *args->tokarr);
-		args->exit_status = 127;
+		args->exit_status = 2;
 	}
 	else
 		perror(NULL);

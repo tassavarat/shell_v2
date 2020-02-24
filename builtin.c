@@ -4,7 +4,7 @@
  * changedir - Changes directory
  * @args: Arguments structure
  *
- * Return: 0 on success
+ * Return: 0 on success, otherwise 1
  */
 int changedir(arguments *args)
 {
@@ -15,6 +15,8 @@ int changedir(arguments *args)
 	{
 		errno = CDERR;
 		error(args);
+		free(cwd);
+		return (1);
 	}
 	nwd = getcwd(nwd, 0);
 	set_environment(&(args->env), "OLDPWD", cwd);
@@ -90,11 +92,11 @@ int clear_scr(arguments *args)
  * builtins - calls appropriate built-ins
  * @args: arguments structure
  *
- * Return: 0 on success, 1 built-in error, 2 no built-in found
+ * Return: 0 on success, 1 no built-in found
  */
 int builtins(arguments *args)
 {
-	size_t i;
+	size_t i, stat;
 	built_ins func_arr[] = {
 		{"cd", changedir},
 		{"env", penv},
@@ -107,6 +109,11 @@ int builtins(arguments *args)
 
 	for (i = 0; func_arr[i].bi; ++i)
 		if (!_strcmp(*args->tokarr, func_arr[i].bi))
-			return (func_arr[i].f(args));
-	return (2);
+		{
+			stat = func_arr[i].f(args);
+			if (!stat)
+				args->exit_status = 0;
+			return (0);
+		}
+	return (1);
 }

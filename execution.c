@@ -7,7 +7,7 @@
  */
 void shell_run(arguments *args, char *lineptr)
 {
-	int stat, fds[3] = {-2, -2, STDOUT_FILENO};
+	int fds[3] = {-2, -2, STDOUT_FILENO};
 
 	check_redirection(args, lineptr, fds);
 	if (fds[0] != -2 && fds[1] != -2 && (fds[0] == -1 || fds[1] == -1
@@ -22,13 +22,8 @@ void shell_run(arguments *args, char *lineptr)
 	args->tokarr = tokenise(lineptr);
 	if (!args->tokarr)
 		return;
-	stat = builtins(args);
-	if (stat == 1)
-		args->exit_status = 2;
-	else if (stat == 2)
+	if (builtins(args))
 		create_process(args);
-	else
-		args->exit_status = 0;
 	cleanup(args, 'L');
 	if (fds[0] != -2)
 	{
