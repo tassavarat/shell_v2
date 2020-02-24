@@ -107,7 +107,7 @@ int builtins(arguments *args);
 /* builtin_2*/
 size_t envmatch(char *s, list *tmp, arguments *args);
 int _unsetenv(arguments *args);
-void set_environment(list **env, char *name, char *value);
+int set_environment(list **env, char *name, char *value);
 int _setenv(arguments *args);
 int parsecd(arguments *args);
 

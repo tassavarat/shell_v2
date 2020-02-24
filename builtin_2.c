@@ -31,10 +31,7 @@ int _unsetenv(arguments *args)
 	list *tmp, *prev = NULL;
 
 	if (!args->tokarr[1])
-	{
-		perror("perror called in _unsetenv");
 		return (1);
-	}
 	tmp = args->env;
 	while (tmp)
 	{
@@ -60,7 +57,7 @@ int _unsetenv(arguments *args)
  * @name: name of the environment
  * @value: value of the @name
  */
-void set_environment(list **env, char *name, char *value)
+int set_environment(list **env, char *name, char *value)
 {
 	list *tmp, *prev = NULL;
 	char buf[PATH_MAX] = {0};
@@ -81,6 +78,8 @@ void set_environment(list **env, char *name, char *value)
 	else
 	{
 		tmp = malloc(sizeof(*tmp)); /*Check  malloc?*/
+		if (!tmp)
+			return (1);
 		tmp->next = NULL;
 	}
 	if (prev)
@@ -88,6 +87,7 @@ void set_environment(list **env, char *name, char *value)
 	else if (!*env)
 		*env = tmp;
 	tmp->str = _strdup(buf);
+	return (0);
 }
 
 
@@ -99,13 +99,11 @@ void set_environment(list **env, char *name, char *value)
  */
 int _setenv(arguments *args)
 {
+	int stat;
+
 	if (args->tokarr[1] && args->tokarr[2])
-	{
-		set_environment(&(args->env), args->tokarr[1], args->tokarr[2]);
-		return (0);
-	}
-	perror("perror called in _setenv");
-	return (1);
+		stat = set_environment(&(args->env), args->tokarr[1], args->tokarr[2]);
+	return (stat);
 }
 
 /**
