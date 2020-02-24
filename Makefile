@@ -1,44 +1,20 @@
-# Make file for shell v2 project at Holberton school
-# List of variables
-SHELL = /bin/bash
 CC = gcc
-CFLAGS = -Wall -Werror -Wextra -pedantic -std=gnu89 -g
-# name of the executable
+CFLAGS = -Wall -Werror -Wextra -pedantic
+SRC = $(wildcard *.c)
+OBJ = $(SRC:.c=.o)
 NAME = hsh
-# Find all c files in current directory and substitute
-# extension with object files (.o)
-OBJ = $(patsubst %.c,%.o, $(wildcard *.c))
-LINTER = betty
 
-# Compile object files only when they are modified,
-# It's implicitly compiled
-# %.o: %.c
-# 	$(CC) -c $< $(CFLAGS)
+.PHONY: all clean oclean flcean re
 
-# Main directive
-all: $(NAME)
-
-# Compile executable from object files
-$(NAME): $(OBJ)
-	$(CC) -o $@ $^ $(CFLAGS)
-
-.PHONY: clean, run, check, memcheck, memfull, test
+all: shell.h $(OBJ)
+	$(CC) $(OBJ) -o $(NAME)
 
 clean:
-	rm -f *.o $(NAME)
+	$(RM) *~ $(NAME)
 
-# Compile and run  command, @ means do not print info
-run: all
-	@./$(NAME)
+oclean:
+	$(RM) $(OBJ)
 
-check:
-	@$(LINTER) *.[ch]
+fclean: clean oclean
 
-memcheck: all
-	@valgrind ./$(NAME)
-
-memfull: all
-	@valgrind --leak-check=full --track-origins=yes ./$(NAME)
-
-test: all
-	cp $(NAME) shell_v2_checker/ && cd shell_v2_checker && ./start.bash
+re: oclean all
