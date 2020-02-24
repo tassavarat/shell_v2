@@ -93,6 +93,8 @@ int set_environment(list **env, char *name, char *value)
 	else if (!*env)
 		*env = tmp;
 	tmp->str = _strdup(buf);
+	if (!tmp->str)
+		return (1);
 	return (0);
 }
 

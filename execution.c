@@ -22,7 +22,7 @@ void shell_run(arguments *args, char *lineptr)
 
 	args->tokarr = tokenise(lineptr);
 	if (!args->tokarr)
-		return;
+		exit(EXIT_FAILURE);
 	if (builtins(args) == 2)
 		create_process(args);
 	cleanup(args, 'L');

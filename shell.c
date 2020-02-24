@@ -39,6 +39,8 @@ void pprompt(arguments *args)
  * @args: arguments structure to initialise
  * @ac: number of arguments
  * @av: arguments passed
+ *
+ * Return: 0 on success, 1 on failure
  */
 int initparam(arguments *args, const int ac, char **av)
 {

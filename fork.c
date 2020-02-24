@@ -23,6 +23,8 @@ char *split_path(char *str)
 		     && *(path + new_pos) != ':'; ++new_pos)
 		;
 	dir = malloc(sizeof(char) * (new_pos - cur_pos + 1));
+	if (!dir)
+		return (NULL);
 	_strncpy(dir, path + cur_pos, new_pos - cur_pos);
 	dir[new_pos - cur_pos] = '\0';
 	cur_pos = *(path + new_pos) ? ++new_pos : new_pos;

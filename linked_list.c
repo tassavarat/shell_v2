@@ -12,10 +12,12 @@ list *add_node_end(list **head, const char *str)
 {
 	list *new, **cur;
 
-	new = malloc(sizeof(list));
+	new = malloc(sizeof(*new));
 	if (!new)
 		return (NULL);
 	new->str = _strdup(str);
+	if (!new->str)
+		return (NULL);
 	new->next = NULL;
 
 	cur = head;
@@ -28,57 +30,13 @@ list *add_node_end(list **head, const char *str)
 		*head = new;
 		return (*head);
 	}
-	/* while (old->next) */
-	/* old = old->next; */
-	/* old->next = new; */
 	return (new);
 }
-
-/*
- * insert_node - inserts node at correct place
- * @head: head of the linked list
- * @number: data of the new node
- * Return: sorted linked list with a new node
- */
-/* list *insert_node(list **head, int number) */
-/* { */
-/*	list *node = NULL; */
-/*	list *prev = NULL; */
-/*	list *next = NULL; */
-
-/*	if (!head) */
-/*		return (NULL); */
-
-/*	node = malloc(sizeof(*node)); */
-/*	if (!node) */
-/*		return (NULL); */
-/*	node->n = number; */
-/*	node->next = NULL; */
-/*	next = *head; */
-
-/*	if (!*head) */
-/*		*head = node; */
-/*	while (prev || next) */
-/*	{ */
-/*		if ((!prev || prev->n <= number) && (!next || next->n > number)) */
-/*		{ */
-/*			if (!prev) */
-/*				*head = node; */
-/*			else */
-/*				prev->next = node; */
-/*			node->next = next; */
-/*		} */
-/*		prev = next; */
-/*		if (next) */
-/*			next = next->next; */
-/*	} */
-
-/*	return (*head); */
-/* } */
 
 /**
  * list_len - counts the number elements of a linked list
  * @h: a pointer to the head of a linked list
+ *
  * Return: The number of nodes
  */
 size_t list_len(const list *h)
