@@ -1,5 +1,6 @@
 # emacs backup files
 *~
+.#*
 
 # Object files
 *.o

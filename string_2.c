@@ -1,6 +1,16 @@
 #include "shell.h"
 
 /**
+ * is_digit - checks if char @n is digit
+ * @n: character
+ * Return: 1 if @n is digit, 0 if not
+ */
+int is_digit(char n)
+{
+	return (n >= '0' && n <= '9' ? 1 : 0);
+}
+
+/**
  * _strncpy - copies string
  * @dest: takes string
  * @src: takes string

@@ -23,20 +23,18 @@ list *add_node_end(list **head, const char *str)
 		cur = &(*cur)->next;
 	new->next = *cur;
 	*cur = new;
-	/*
 	if (!*head)
 	{
 		*head = new;
 		return (*head);
 	}
-	while (old->next)
-		old = old->next;
-	old->next = new;
-	*/
+	/* while (old->next) */
+	/* old = old->next; */
+	/* old->next = new; */
 	return (new);
 }
 
-/**
+/*
  * insert_node - inserts node at correct place
  * @head: head of the linked list
  * @number: data of the new node
@@ -44,38 +42,38 @@ list *add_node_end(list **head, const char *str)
  */
 /* list *insert_node(list **head, int number) */
 /* { */
-/* 	list *node = NULL; */
-/* 	list *prev = NULL; */
-/* 	list *next = NULL; */
+/*	list *node = NULL; */
+/*	list *prev = NULL; */
+/*	list *next = NULL; */
 
-/* 	if (!head) */
-/* 		return (NULL); */
+/*	if (!head) */
+/*		return (NULL); */
 
-/* 	node = malloc(sizeof(*node)); */
-/* 	if (!node) */
-/* 		return (NULL); */
-/* 	node->n = number; */
-/* 	node->next = NULL; */
-/* 	next = *head; */
+/*	node = malloc(sizeof(*node)); */
+/*	if (!node) */
+/*		return (NULL); */
+/*	node->n = number; */
+/*	node->next = NULL; */
+/*	next = *head; */
 
-/* 	if (!*head) */
-/* 		*head = node; */
-/* 	while (prev || next) */
-/* 	{ */
-/* 		if ((!prev || prev->n <= number) && (!next || next->n > number)) */
-/* 		{ */
-/* 			if (!prev) */
-/* 				*head = node; */
-/* 			else */
-/* 				prev->next = node; */
-/* 			node->next = next; */
-/* 		} */
-/* 		prev = next; */
-/* 		if (next) */
-/* 			next = next->next; */
-/* 	} */
+/*	if (!*head) */
+/*		*head = node; */
+/*	while (prev || next) */
+/*	{ */
+/*		if ((!prev || prev->n <= number) && (!next || next->n > number)) */
+/*		{ */
+/*			if (!prev) */
+/*				*head = node; */
+/*			else */
+/*				prev->next = node; */
+/*			node->next = next; */
+/*		} */
+/*		prev = next; */
+/*		if (next) */
+/*			next = next->next; */
+/*	} */
 
-/* 	return (*head); */
+/*	return (*head); */
 /* } */
 
 /**

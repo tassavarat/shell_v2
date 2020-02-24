@@ -1,5 +1,12 @@
 #include "shell.h"
 
+/**
+ * checkerr - Check for syntax errors, helper function
+ * @stat: status flag
+ * @errs: error string
+ * @i: postion of pointer in input string
+ * @incr: increment @i based on this value
+ */
 void checkerr(int *stat, char *errs, size_t *i, int incr)
 {
 	printf("syntax error %s\n", errs);
@@ -8,63 +15,68 @@ void checkerr(int *stat, char *errs, size_t *i, int incr)
 		++*i;
 }
 
-int checkchar(char *s, size_t *i)
-{
-	static char notspace = 0;
-	int stat = 0;
+/* int checkchar(char *s, size_t *i) */
+/* { */
+/*	static char notspace = 0; */
+/*	int stat = 0; */
 
-	if (s[0] == '|' &&  s[1] == '|')
-	{
-		if (!notspace)
-		{
-			s[2] = '\0';
-			checkerr(&stat, s, i, 1);
-			/*
-			printf("syntax error %s\n", s);
-			stat = 1;
-			*/
-		}
-		notspace = 0;
-		/*
-		++i;
-		*/
-	}
-	else if (s[0] == '&')
-	{
-		if (!notspace || s[1] != '&')
-		{
-			s[1] = '\0';
-			checkerr(&stat, s, i, 1);
-			/*
-			printf("syntax error %s\n", s);
-			stat = 1;
-			*/
-		}
-		notspace = 0;
-		/*
-		++i;
-		*/
-	}
-	else if (s[0] == ';' || s[0] == '|')
-	{
-		if (!notspace)
-		{
-			checkerr(&stat, s, i, 0);
-			s[1] = '\0';
-			/*
-			printf("syntax error %s\n", s);
-			stat = 1;
-			*/
-		}
-		notspace = 0;
-	}
-	else if (s[0] != ' ' && s[0] != '\t' )
-	{
-		notspace = 1;
-	}
-	return (stat);
-}
+/*	if (s[0] == '|' &&  s[1] == '|') */
+/*	{ */
+/*		if (!notspace) */
+/*		{ */
+/*			s[2] = '\0'; */
+/*			checkerr(&stat, s, i, 1); */
+/*			/\* */
+/*			printf("syntax error %s\n", s); */
+/*			stat = 1; */
+/*			*\/ */
+/*		} */
+/*		notspace = 0; */
+/*		/\* */
+/*		++i; */
+/*		*\/ */
+/*	} */
+/*	else if (s[0] == '&') */
+/*	{ */
+/*		if (!notspace || s[1] != '&') */
+/*		{ */
+/*			s[1] = '\0'; */
+/*			checkerr(&stat, s, i, 1); */
+/*			/\* */
+/*			printf("syntax error %s\n", s); */
+/*			stat = 1; */
+/*			*\/ */
+/*		} */
+/*		notspace = 0; */
+/*		/\* */
+/*		++i; */
+/*		*\/ */
+/*	} */
+/*	else if (s[0] == ';' || s[0] == '|') */
+/*	{ */
+/*		if (!notspace) */
+/*		{ */
+/*			checkerr(&stat, s, i, 0); */
+/*			s[1] = '\0'; */
+/*			/\* */
+/*			printf("syntax error %s\n", s); */
+/*			stat = 1; */
+/*			*\/ */
+/*		} */
+/*		notspace = 0; */
+/*	} */
+/*	else if (s[0] != ' ' && s[0] != '\t' ) */
+/*	{ */
+/*		notspace = 1; */
+/*	} */
+/*	return (stat); */
+/* } */
 
+/**
+ * syntaxerr - main syntax check function
+ * @lineptr: input sting
+ * Return: 1 if there is an syntax error, 0 otherwise
+ */
 int syntaxerr(char *lineptr)
 {
 	char dquote, squote;
@@ -77,9 +89,9 @@ int syntaxerr(char *lineptr)
 				lineptr[i - 1] != '\\') ? ~squote : squote;
 		dquote = lineptr[i] == '"' && (i == 0 ||
 				lineptr[i - 1] != '\\') ? ~dquote : dquote;
-		if (!squote && !dquote &&
-				checkchar(lineptr + i, &i))
-			return (1);
+		/* if (!squote && !dquote && */
+		/*		checkchar(lineptr + i, &i)) */
+		/*	return (1); */
 	}
 	return (0);
 }
