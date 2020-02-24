@@ -16,13 +16,12 @@ void shell_run(arguments *args, char *lineptr)
 		if (fds[0] != -1)
 			close(fds[0]);
 		error(args);
-		free(lineptr);
 		return;
 	}
 
 	args->tokarr = tokenise(lineptr);
 	if (!args->tokarr)
-		exit(EXIT_FAILURE);
+		return;
 	if (builtins(args) == 2)
 		create_process(args);
 	cleanup(args, 'L');

@@ -2,7 +2,7 @@
 # List of variables
 SHELL = /bin/bash
 CC = gcc
-CFLAGS = -Wall -Werror -Wextra -pedantic -std=gnu89
+CFLAGS = -Wall -Werror -Wextra -pedantic -std=gnu89 -g
 # name of the executable
 NAME = hsh
 # Find all c files in current directory and substitute
