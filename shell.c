@@ -11,9 +11,11 @@ int main(int ac, char *av[])
 {
 	arguments args;
 
-	initparam(&args, ac, av);
-	shell(&args);
-	cleanup(&args, '\0');
+	if (!initparam(&args, ac, av))
+	{
+		shell(&args);
+		cleanup(&args, '\0');
+	}
 	return (args.exit_status);
 }
 
@@ -38,14 +40,20 @@ void pprompt(arguments *args)
  * @ac: number of arguments
  * @av: arguments passed
  */
-void initparam(arguments *args, const int ac, char **av)
+int initparam(arguments *args, const int ac, char **av)
 {
 	args->ac = ac;
 	args->av = av;
 	args->exitstr = "";
 	args->tokarr = NULL;
 	args->env = envlist();
-	args->exit_status = 0;
+	if (!args->env)
+	{
+		args->exit_status = EXIT_FAILURE;
+		return (EXIT_FAILURE);
+	}
+	args->exit_status = EXIT_SUCCESS;
 	args->cmdnum = 1;
 	args->errstr = "";
+	return (EXIT_SUCCESS);
 }
