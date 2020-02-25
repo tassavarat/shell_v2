@@ -38,7 +38,9 @@ int penv(arguments *args)
 
 	while (cur)
 	{
-		printf("%s\n", cur->str);
+		/* printf("%s\n", cur->str); FIXME: printf*/
+		_puts(cur->str);
+		_puts("\n");
 		cur = cur->next;
 	}
 	return (0);
@@ -84,7 +86,9 @@ int clear_scr(arguments *args)
 	char *move = "\033[1;1H";
 
 	(void) args;
-	printf("%s%s", move, clr);
+	/* printf("%s%s", move, clr); FIXME: printf*/
+	_puts(move);
+	_puts(clr);
 	return (0);
 }
 

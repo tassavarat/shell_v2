@@ -144,7 +144,9 @@ int parsecd(arguments *args)
 		if (oldpw)
 			val = chdir(oldpw);
 		tmp = getcwd(tmp, 0);
-		printf("%s\n", tmp);
+		/* printf("%s\n", tmp); FIXME: printf*/
+		_puts(tmp);
+		_puts("\n");
 		free(tmp);
 	}
 	else

@@ -139,5 +139,6 @@ void shell(arguments *args);
 
 size_t list_len(const list *h);
 char **ltoa(list *head);
+int _puts(char *str);
 
 #endif /* SHELL_H */

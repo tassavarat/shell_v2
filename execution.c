@@ -50,7 +50,8 @@ void shell(arguments *args)
 		/* if (byterd == EOF || syntaxerr(lineptr)) FIXME*/
 		if (byterd == EOF)
 		{
-			printf("%s", args->exitstr);
+			/* printf("%s", args->exitstr); FIXME: printf */
+			_puts(args->exitstr);
 			free(lineptr);
 			return;
 		}
