@@ -108,6 +108,7 @@ int builtins(arguments *args)
 		{"clear", clear_scr},
 		{"setenv", _setenv},
 		{"unsetenv", _unsetenv},
+		{"help", help},
 		{NULL, NULL}
 	};
 

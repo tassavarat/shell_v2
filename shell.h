@@ -112,6 +112,10 @@ int set_environment(list **env, char *name, char *value);
 int _setenv(arguments *args);
 int parsecd(arguments *args);
 
+/* builtin_3  */
+int help(arguments *args);
+void help2(arguments *args);
+
 /* fork */
 char *split_path(char *str);
 char *get_path(arguments *args);
@@ -135,7 +139,6 @@ char **tokenise(char *lineptr);
 /* execution */
 void shell_run(arguments *args, char *lineptr);
 void shell(arguments *args);
-
 
 size_t list_len(const list *h);
 char **ltoa(list *head);
