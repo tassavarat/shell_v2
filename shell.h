@@ -136,4 +136,8 @@ char **tokenise(char *lineptr);
 void shell_run(arguments *args, char *lineptr);
 void shell(arguments *args);
 
+
+size_t list_len(const list *h);
+char **ltoa(list *head);
+
 #endif /* SHELL_H */

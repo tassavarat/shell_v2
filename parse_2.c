@@ -31,6 +31,7 @@ void check_redirection(arguments *args, char *lineptr, int *fds)
 	char *file;
 
 	(void) args;
+	return; /*FIXME: remove it*/
 	for (i = 0; lineptr[i]; ++i)
 	{
 		if (no_quote(lineptr, i, &quote))
@@ -91,6 +92,8 @@ void parse_operators(arguments *args, char *lineptr)
 	char quote = 0, operator = ';';
 	size_t i, line_pos = 0;
 
+	shell_run(args, lineptr); /*FIXME: delete this and next line*/
+	return;
 	for (i = 0; lineptr[i]; ++i)
 	{
 		if (no_quote(lineptr, i, &quote))

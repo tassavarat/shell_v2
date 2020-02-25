@@ -1,6 +1,34 @@
 #include "shell.h"
 
 /**
+ * ltoa - Converts linked list to array
+ * @head: Pointer to first node
+ *
+ * Return: Converted array
+ */
+char **ltoa(list *head)
+{
+	int i = 0, len = list_len(head);
+	char **arr = NULL;
+
+	if (!head)
+		return (NULL);
+	arr = malloc(sizeof(char *) * (len + 1));
+	if (!arr)
+		return (NULL);
+
+	while (head)
+	{
+		arr[i] = head->str;
+		head = head->next;
+		++i;
+	}
+	arr[i] = NULL;
+	return (arr);
+}
+
+
+/**
  * arrtol - Converts arrays to linked list
  *
  * Return: Pointer to first node

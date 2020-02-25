@@ -47,7 +47,8 @@ void shell(arguments *args)
 	{
 		pprompt(args);
 		byterd = getline(&lineptr, &n, stdin);
-		if (byterd == EOF || syntaxerr(lineptr))
+		/* if (byterd == EOF || syntaxerr(lineptr)) FIXME*/
+		if (byterd == EOF)
 		{
 			printf("%s", args->exitstr);
 			free(lineptr);

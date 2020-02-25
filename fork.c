@@ -64,6 +64,7 @@ void forkproc(arguments *args, char *exec)
 {
 	pid_t pid = 0;
 	int wstatus;
+	char **envlist = NULL;
 
 	pid = fork();
 	if (pid < 0)
@@ -72,8 +73,10 @@ void forkproc(arguments *args, char *exec)
 	}
 	else if (pid == 0)
 	{
-		if (execve(exec, args->tokarr, NULL))
+		envlist = ltoa(args->env);
+		if (execve(exec, args->tokarr, envlist))
 		{
+			free(envlist);
 			error(args);
 			exit(errno);
 		}
