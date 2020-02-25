@@ -10,13 +10,15 @@ void shell_run(arguments *args, char *lineptr)
 	int fds[3] = {-2, -2, STDOUT_FILENO};
 
 	check_redirection(args, lineptr, fds);
-	if (fds[0] != -2 && fds[1] != -2 && (fds[0] == -1 || fds[1] == -1
-					 || dup2(fds[0], fds[2]) == -1))
+	/* if (fds[0] != -2 && fds[1] != -2 && (fds[0] == -1 || fds[1] == -1 */
+	/* FIXME: redirection				 || dup2(fds[0], fds[2]) == -1)) */
+	if (fds[0] != -2)
 	{
-		if (fds[0] != -1)
-			close(fds[0]);
-		error(args);
-		return;
+		dup2(fds[0], fds[2]);
+		/* if (fds[0] != -1) */
+		/*	close(fds[0]); */
+		/* error(args); */
+		/* return; FIXME: redirection*/
 	}
 
 	args->tokarr = tokenise(lineptr);
@@ -27,8 +29,9 @@ void shell_run(arguments *args, char *lineptr)
 	cleanup(args, 'L');
 	if (fds[0] != -2)
 	{
-		if (dup2(fds[1], fds[2]) == -1)
-			error(args);
+		/* if (dup2(fds[1], fds[2]) == -1) */
+		/*	error(args); FIXME: redirection */
+		dup2(fds[1], fds[2]);
 		close(fds[0]);
 	}
 }
