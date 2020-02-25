@@ -27,7 +27,7 @@ void check_redirection(arguments *args, char *lineptr, int *fds)
 {
 	char quote = 0;
 	size_t i;
-	int flags = O_RDWR | O_CREAT;
+	int flags = O_RDWR | O_CREAT | O_TRUNC;
 	char *file;
 
 	(void) args;
@@ -45,9 +45,9 @@ void check_redirection(arguments *args, char *lineptr, int *fds)
 				}
 				lineptr[i++] = '\0';
 				if (lineptr[i] == '>')
-					++i, flags |= O_APPEND;
+					++i, flags = (flags & ~O_TRUNC) | O_APPEND;
 				file = strtok(lineptr + i, " \t\n");
-				fds[0] = open(file, flags, 0664);
+				fds[0] = open(file, flags, 0666);
 				fds[1] = dup(fds[2]);
 				break;
 			}
