@@ -7,8 +7,10 @@
  */
 void clean_redirection(arguments *args, int *fds)
 {
-	if (dup2(fds[1], fds[2]) == -1)
-		error(args);
+	/* if (dup2(fds[1], fds[2]) == -1) */
+	/*	error(args); FIXME: n> error message */
+	(void) args;
+	dup2(fds[1], fds[2]);
 	close(fds[0]);
 }
 
@@ -63,8 +65,8 @@ int stdin_redirection(arguments *args, char *lineptr, size_t i, int *fds)
 	char *file;
 
 	lineptr[i++] = '\0';
-
 	file = strtok(lineptr + i, " \t\n");
+
 	return (check_redirect_errs(args, fds, flags, file, 0, 0));
 }
 
@@ -90,7 +92,7 @@ int stdout_redirection(arguments *args, char *lineptr, size_t i, int *fds)
 	}
 	lineptr[i++] = '\0';
 	if (lineptr[i] == '>')
-		++i, flags |= O_APPEND & ~O_TRUNC;
+		++i, flags = (flags & ~O_TRUNC) | O_APPEND;
 	file = strtok(lineptr + i, " \t\n");
 
 	return (check_redirect_errs(args, fds, flags, file, is_valid, 1));
