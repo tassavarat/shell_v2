@@ -97,44 +97,6 @@ int syntaxerr(char *lineptr)
 }
 
 /**
- * error - display errors
- * @args: command from user
- */
-void error(arguments *args)
-{
-	fprintf(stderr, "%s: %lu: ", *args->av, args->cmdnum);
-	if (errno == EXITERR)
-	{
-		fprintf(stderr, "%s: Illegal number: %s\n", *args->tokarr,
-				args->tokarr[1]);
-		args->exit_status = 2;
-	}
-	else if (errno == CDERR)
-	{
-		fprintf(stderr, "%s: can't cd to %s\n", *args->tokarr,
-				args->tokarr[1]);
-		args->exit_status = 2;
-	}
-	else if (errno == EACCES)
-	{
-		perror("cannot create file");
-		args->exit_status = 126;
-	}
-	else if (errno == ENOENT)
-	{
-		fprintf(stderr, "%s: not found\n", *args->tokarr);
-		args->exit_status = 127;
-	}
-	else if (errno == ENVERR)
-	{
-		fprintf(stderr, "%s: invalid argument(s)\n", *args->tokarr);
-		args->exit_status = 2;
-	}
-	else
-		perror(NULL);
-}
-
-/**
  * cleanup - performs relevant cleanup for arguments structure
  * @args: arguments structure
  * @mode: if there is tokenised array to free

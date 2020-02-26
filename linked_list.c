@@ -1,39 +1,6 @@
 #include "shell.h"
 
 /**
- * add_node_end - Adds a node at the end of a list
- * @head: Pointer to address of a list
- * @str: Pointer to string
- *
- * Return: Address of new element
- * On error, NULL
- */
-list *add_node_end(list **head, const char *str)
-{
-	list *new, **cur;
-
-	new = malloc(sizeof(*new));
-	if (!new)
-		return (NULL);
-	new->str = _strdup(str);
-	if (!new->str)
-		return (NULL);
-	new->next = NULL;
-
-	cur = head;
-	while (*cur)
-		cur = &(*cur)->next;
-	new->next = *cur;
-	*cur = new;
-	if (!*head)
-	{
-		*head = new;
-		return (*head);
-	}
-	return (new);
-}
-
-/**
  * list_len - counts the number elements of a linked list
  * @h: a pointer to the head of a linked list
  *
@@ -109,3 +76,37 @@ void free_list(list *head)
 		current_addr = next_addr;
 	}
 }
+
+/**
+ * add_node_end - Adds a node at the end of a list
+ * @head: Pointer to address of a list
+ * @str: Pointer to string
+ *
+ * Return: Address of new element
+ * On error, NULL
+ */
+list *add_node_end(list **head, const char *str)
+{
+	list *new, **cur;
+
+	new = malloc(sizeof(*new));
+	if (!new)
+		return (NULL);
+	new->str = _strdup(str);
+	if (!new->str)
+		return (NULL);
+	new->next = NULL;
+
+	cur = head;
+	while (*cur)
+		cur = &(*cur)->next;
+	new->next = *cur;
+	*cur = new;
+	if (!*head)
+	{
+		*head = new;
+		return (*head);
+	}
+	return (new);
+}
+

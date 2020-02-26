@@ -1,22 +1,41 @@
 #include "shell.h"
 
 /**
- * main - entry point
- * @ac: number of arguments
- * @av: arguments passed
- *
- * Return: exit status
+ * error - display errors
+ * @args: command from user
  */
-int main(int ac, char *av[])
+void error(arguments *args)
 {
-	arguments args;
-
-	if (!initparam(&args, ac, av))
+	fprintf(stderr, "%s: %lu: ", *args->av, args->cmdnum);
+	if (errno == EXITERR)
 	{
-		shell(&args);
-		cleanup(&args, '\0');
+		fprintf(stderr, "%s: Illegal number: %s\n", *args->tokarr,
+				args->tokarr[1]);
+		args->exit_status = 2;
 	}
-	return (args.exit_status);
+	else if (errno == CDERR)
+	{
+		fprintf(stderr, "%s: can't cd to %s\n", *args->tokarr,
+				args->tokarr[1]);
+		args->exit_status = 2;
+	}
+	else if (errno == EACCES)
+	{
+		perror("cannot create file");
+		args->exit_status = 126;
+	}
+	else if (errno == ENOENT)
+	{
+		fprintf(stderr, "%s: not found\n", *args->tokarr);
+		args->exit_status = 127;
+	}
+	else if (errno == ENVERR)
+	{
+		fprintf(stderr, "%s: invalid argument(s)\n", *args->tokarr);
+		args->exit_status = 2;
+	}
+	else
+		perror(NULL);
 }
 
 /**
@@ -60,17 +79,22 @@ int initparam(arguments *args, const int ac, char **av)
 	return (EXIT_SUCCESS);
 }
 
-
 /**
- * _puts - prints a string with newline
- * @str: the string to print
+ * main - entry point
+ * @ac: number of arguments
+ * @av: arguments passed
  *
- * Return: number of chars written
+ * Return: exit status
  */
-int _puts(char *str)
+int main(int ac, char *av[])
 {
-	size_t i = _strlen(str);
+	arguments args;
 
-	write(1, str, i);
-	return (i);
+	if (!initparam(&args, ac, av))
+	{
+		shell(&args);
+		cleanup(&args, '\0');
+	}
+	return (args.exit_status);
 }
+

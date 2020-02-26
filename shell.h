@@ -69,88 +69,72 @@ typedef struct built_ins
 } built_ins;
 
 /* shell */
-void pprompt(arguments *args);
 int initparam(arguments *args, const int ac, char **av);
-
-
+void pprompt(arguments *args);
 void error(arguments *args);
 
 /* string */
-int _atoi(char *s);
-char *_strdup(const char *str);
-size_t _strlen(char *str);
-int _strncmp(const char *s1, const char *s2, size_t n);
 int _strcmp(char *s1, char *s2);
-
-char *_strchr(char *s, char c);
-
-/* string_2 */
-int is_digit(char n);
-char *_strncpy(char *dest, char *src, int n);
-char *_memset(char *s, char b, unsigned int n);
-char *_strchr(char *s, char c);
+int _strncmp(const char *s1, const char *s2, size_t n);
+size_t _strlen(char *str);
+char *_strdup(const char *str);
+int _atoi(char *s);
 char *_strcat(char *dest, char *src);
+char *_strchr(char *s, char c);
+char *_memset(char *s, char b, unsigned int n);
+char *_strncpy(char *dest, char *src, int n);
+int is_digit(char n);
+int _puts(char *str);
 
 /* environment */
 char *_getenv(char *name, arguments *args);
 list *envlist(void);
+char **ltoa(list *head);
 
 /* linked_list */
 list *add_node_end(list **head, const char *str);
+size_t list_len(const list *h);
 
 /* builtin */
-int changedir(arguments *args);
-int penv(arguments *args);
-int callexit(arguments *args);
-int clear_scr(arguments *args);
 int builtins(arguments *args);
-
-/* builtin_2*/
-size_t envmatch(char *s, list *tmp, arguments *args);
-int _unsetenv(arguments *args);
-int set_environment(list **env, char *name, char *value);
-int _setenv(arguments *args);
+int clear_scr(arguments *args);
+int callexit(arguments *args);
+int penv(arguments *args);
+int changedir(arguments *args);
 int parsecd(arguments *args);
-
-/* builtin_3  */
-int help(arguments *args);
+int _setenv(arguments *args);
+int set_environment(list **env, char *name, char *value);
+int _unsetenv(arguments *args);
+size_t envmatch(char *s, list *tmp, arguments *args);
 void help2(arguments *args);
+int help(arguments *args);
 
 /* fork */
-char *split_path(char *str);
-char *get_path(arguments *args);
-void forkproc(arguments *args, char *exec);
 void create_process(arguments *args);
+void forkproc(arguments *args, char *exec);
+char *get_path(arguments *args);
+char *split_path(char *str);
 
 /* parse */
-void checkerr(int *stat, char *errs, size_t *i, int incr);
-int syntaxerr(char *lineptr);
-void error(arguments *args);
-void cleanup(arguments *args, char mode);
 size_t wordcount(char *lineptr);
-
-/* parse_2 */
-char no_quote(char *lineptr, size_t i, char *quote);
-int check_redirection(arguments *args, char *lineptr, int *fds);
-int is_comment(char *lineptr, size_t i);
-void parse_operators(arguments *args, char *lineptr);
+void cleanup(arguments *args, char mode);
+int syntaxerr(char *lineptr);
+void checkerr(int *stat, char *errs, size_t *i, int incr);
 char **tokenise(char *lineptr);
+void parse_operators(arguments *args, char *lineptr);
+int is_comment(char *lineptr, size_t i);
+char no_quote(char *lineptr, size_t i, char *quote);
 
 /* execution */
 void shell_run(arguments *args, char *lineptr);
 void shell(arguments *args);
 
 /* redirection */
-void clean_redirection(arguments *args, int *fds);
+int check_redirection(arguments *args, char *lineptr, int *fds);
+int stdout_redirection(arguments *args, char *lineptr, size_t i, int *fds);
+int stdin_redirection(arguments *args, char *lineptr, size_t i, int *fds);
 int check_redirect_errs(arguments *args, int *fds, int flags, char *file,
 			int is_valid, int which_redirect);
-int stdin_redirection(arguments *args, char *lineptr, size_t i, int *fds);
-int stdout_redirection(arguments *args, char *lineptr, size_t i, int *fds);
-int check_redirection(arguments *args, char *lineptr, int *fds);
-
-
-size_t list_len(const list *h);
-char **ltoa(list *head);
-int _puts(char *str);
+void clean_redirection(arguments *args, int *fds);
 
 #endif /* SHELL_H */
