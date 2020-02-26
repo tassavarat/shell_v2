@@ -27,6 +27,14 @@ void clean_redirection(arguments *args, int *fds)
 int check_redirect_errs(arguments *args, int *fds, int flags, char *file,
 			int is_valid, int which_redirect)
 {
+
+	if (!file)
+	{
+		fprintf(stderr, "%s: %lu: ", *args->av, args->cmdnum);
+		fprintf(stderr, "Syntax error: newline unexpected\n");
+		args->exit_status = 2;
+		return (-1);
+	}
 	fds[0] = open(file, flags, 0666);
 	fds[1] = dup(fds[2]);
 	if (fds[0] == -1 || (fds[1] == -1 && !is_valid))
