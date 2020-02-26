@@ -131,7 +131,7 @@ size_t wordcount(char *lineptr);
 
 /* parse_2 */
 char no_quote(char *lineptr, size_t i, char *quote);
-void check_redirection(arguments *args, char *lineptr, int *fds);
+int check_redirection(arguments *args, char *lineptr, int *fds);
 int is_comment(char *lineptr, size_t i);
 void parse_operators(arguments *args, char *lineptr);
 char **tokenise(char *lineptr);
@@ -139,6 +139,15 @@ char **tokenise(char *lineptr);
 /* execution */
 void shell_run(arguments *args, char *lineptr);
 void shell(arguments *args);
+
+/* redirection */
+void clean_redirection(arguments *args, int *fds);
+int check_redirect_errs(arguments *args, int *fds, int flags, char *file,
+			int is_valid, int which_redirect);
+int stdin_redirection(arguments *args, char *lineptr, size_t i, int *fds);
+int stdout_redirection(arguments *args, char *lineptr, size_t i, int *fds);
+int check_redirection(arguments *args, char *lineptr, int *fds);
+
 
 size_t list_len(const list *h);
 char **ltoa(list *head);

@@ -18,55 +18,6 @@ char no_quote(char *lineptr, size_t i, char *quote)
 }
 
 /**
- * check_redirection - handles redirections
- * @args: arguments
- * @lineptr: input string
- * @fds: file descriptors
- */
-void check_redirection(arguments *args, char *lineptr, int *fds)
-{
-	char quote = 0;
-	size_t i;
-	int flags = O_RDWR;
-	char *file;
-
-	(void) args;
-	for (i = 0; lineptr[i]; ++i)
-	{
-		if (no_quote(lineptr, i, &quote))
-		{
-			/* TODO: Handle ls; ls >> error */
-			if (lineptr[i] == '>')
-			{
-				if (i != 0 && is_digit(lineptr[i - 1]))
-				{
-					fds[2] = lineptr[i - 1] - '0';
-					lineptr[i - 1] = '\0';
-				}
-				lineptr[i++] = '\0';
-				if (lineptr[i] == '>')
-					++i, flags |= O_APPEND | O_CREAT;
-				else
-					flags |= O_TRUNC | O_CREAT;
-				file = strtok(lineptr + i, " \t\n");
-				fds[0] = open(file, flags, 0666);
-				fds[1] = dup(fds[2]);
-				break;
-			}
-			if (lineptr[i] == '<')
-			{
-				lineptr[i++] = '\0';
-				file = strtok(lineptr + i, " \n");
-				fds[0] = open(file, flags, 0664);
-				fds[2] = STDIN_FILENO;
-				fds[1] = dup(fds[2]);
-				break;
-			}
-		}
-	}
-}
-
-/**
  * is_comment - checks if # sign is comment
  * @lineptr: input string
  * @i: cursor position in @lineptr

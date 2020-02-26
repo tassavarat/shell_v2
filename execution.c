@@ -8,32 +8,19 @@
 void shell_run(arguments *args, char *lineptr)
 {
 	int fds[3] = {-2, -2, STDOUT_FILENO};
+	int res;
 
-	check_redirection(args, lineptr, fds);
-	/* if (fds[0] != -2 && fds[1] != -2 && (fds[0] == -1 || fds[1] == -1 */
-	/* FIXME: redirection				 || dup2(fds[0], fds[2]) == -1)) */
-	if (fds[0] != -2)
-	{
-		dup2(fds[0], fds[2]);
-		/* if (fds[0] != -1) */
-		/*	close(fds[0]); */
-		/* error(args); */
-		/* return; FIXME: redirection*/
-	}
-
+	res = check_redirection(args, lineptr, fds);
+	if (res == -1)
+		return;
 	args->tokarr = tokenise(lineptr);
 	if (!args->tokarr)
 		return;
 	if (builtins(args))
 		create_process(args);
 	cleanup(args, 'L');
-	if (fds[0] != -2)
-	{
-		/* if (dup2(fds[1], fds[2]) == -1) */
-		/*	error(args); FIXME: redirection */
-		dup2(fds[1], fds[2]);
-		close(fds[0]);
-	}
+	if (res == 1)
+		clean_redirection(args, fds);
 }
 
 /**
