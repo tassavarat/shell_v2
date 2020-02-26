@@ -3,7 +3,7 @@
 /**
  * clean_redirection - reverts back redirection
  * @args: arguments struct
- * @fds - file descriptors, fds[3]
+ * @fds: file descriptors, fds[3]
  */
 void clean_redirection(arguments *args, int *fds)
 {
@@ -62,7 +62,6 @@ int stdin_redirection(arguments *args, char *lineptr, size_t i, int *fds)
 	int flags = O_RDONLY;
 	char *file;
 
-	fds[2] = STDOUT_FILENO;
 	lineptr[i++] = '\0';
 
 	file = strtok(lineptr + i, " \t\n");
@@ -115,9 +114,15 @@ int check_redirection(arguments *args, char *lineptr, int *fds)
 		if (no_quote(lineptr, i, &quote))
 		{
 			if (lineptr[i] == '>')
+			{
+				fds[2] = STDOUT_FILENO;
 				return (stdout_redirection(args, lineptr, i, fds));
+			}
 			if (lineptr[i] == '<')
+			{
+				fds[2] = STDIN_FILENO;
 				return (stdin_redirection(args, lineptr, i, fds));
+			}
 		}
 	}
 	return (0);

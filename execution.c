@@ -7,7 +7,7 @@
  */
 void shell_run(arguments *args, char *lineptr)
 {
-	int fds[3] = {-2, -2, STDOUT_FILENO};
+	int fds[3] = {0};
 	int res;
 
 	res = check_redirection(args, lineptr, fds);
