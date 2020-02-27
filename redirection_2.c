@@ -25,7 +25,8 @@ char *heredoc(arguments *args, char *lineptr, size_t i)
 	{
 		write(STDOUT_FILENO, "> ", 2);
 		read_size = read(STDIN_FILENO, &buf, BUFSIZ);
-		if (!_strncmp(buf, term_char, _strlen(term_char)))
+		if (!_strncmp(buf, term_char, _strlen(term_char)) &&
+		    _strlen(term_char) == _strlen(buf) - 1)
 			break;
 		write(fd, buf, read_size);
 		_memset(buf, 0, BUFSIZ);
