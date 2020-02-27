@@ -58,7 +58,6 @@ int check_redirect_errs(arguments *args, int *fds, int flags, char *file,
 	return (1);
 }
 
-
 /**
  * stdin_redirection - handles stdin redirections
  * @args: arguments
@@ -73,7 +72,10 @@ int stdin_redirection(arguments *args, char *lineptr, size_t i, int *fds)
 	char *file;
 
 	lineptr[i++] = '\0';
-	file = strtok(lineptr + i, " \t\n");
+	if (lineptr[i] == '<')
+		file = heredoc(args, lineptr, i);
+	else
+		file = strtok(lineptr + i, " \t\n");
 
 	return (check_redirect_errs(args, fds, flags, file, 0, 0));
 }

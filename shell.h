@@ -137,4 +137,7 @@ int check_redirect_errs(arguments *args, int *fds, int flags, char *file,
 			int is_valid, int which_redirect);
 void clean_redirection(arguments *args, int *fds);
 
+/* redirection_2 */
+char *heredoc(arguments *args, char *lineptr, size_t i);
+
 #endif /* SHELL_H */
