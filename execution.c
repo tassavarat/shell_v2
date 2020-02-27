@@ -7,11 +7,13 @@
  */
 void shell_run(arguments *args, char *lineptr)
 {
-	int fds[3] = {0};
-	int res;
+	int rstat, pstat, fds[3] = {0};
 
-	res = check_redirection(args, lineptr, fds);
-	if (res == -1)
+	rstat = check_redirection(args, lineptr, fds);
+	if (rstat == -1)
+		return;
+	pstat = check_pipe(args, lineptr);
+	if (pstat == -1)
 		return;
 	args->tokarr = tokenise(lineptr);
 	if (!args->tokarr)
@@ -19,7 +21,7 @@ void shell_run(arguments *args, char *lineptr)
 	if (builtins(args))
 		create_process(args);
 	cleanup(args, 'L');
-	if (res == 1)
+	if (rstat == 1)
 		clean_redirection(args, fds);
 }
 

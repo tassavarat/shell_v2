@@ -77,6 +77,7 @@ int initparam(arguments *args, const int ac, char **av)
 	args->exit_status = EXIT_SUCCESS;
 	args->cmdnum = 1;
 	args->errstr = "";
+	args->cmdcnt = 1;
 	return (EXIT_SUCCESS);
 }
 

@@ -53,7 +53,7 @@ void parse_operators(arguments *args, char *lineptr)
 			if ((lineptr[i] == '&' || lineptr[i] == '|')
 			    && i != 0 && lineptr[i - 1] == '\0')
 			{
-				operator = lineptr[i]; /*Handles second & or | */
+				operator = lineptr[i]; /* Handles second & or | */
 				line_pos = i + 1;
 			}
 			else if (lineptr[i] == ';' ||

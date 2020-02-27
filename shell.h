@@ -53,6 +53,7 @@ typedef struct arguments
 	int exit_status;
 	size_t cmdnum;
 	char *errstr;
+	size_t cmdcnt;
 } arguments;
 
 extern char **environ;
@@ -136,8 +137,9 @@ int stdin_redirection(arguments *args, char *lineptr, size_t i, int *fds);
 int check_redirect_errs(arguments *args, int *fds, int flags, char *file,
 			int is_valid, int which_redirect);
 void clean_redirection(arguments *args, int *fds);
-
-/* redirection_2 */
 char *heredoc(arguments *args, char *lineptr, size_t i);
+
+/* pipe */
+int check_pipe(arguments *args, char *lineptr);
 
 #endif /* SHELL_H */
