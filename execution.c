@@ -35,7 +35,7 @@ void shell(arguments *args)
 
 	while (1)
 	{
-		pprompt(args);
+		pprompt(args, "$");
 		byterd = getline(&lineptr, &n, stdin);
 		/* if (byterd == EOF || syntaxerr(lineptr)) FIXME*/
 		if (byterd == EOF)

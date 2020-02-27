@@ -70,7 +70,7 @@ typedef struct built_ins
 
 /* shell */
 int initparam(arguments *args, const int ac, char **av);
-void pprompt(arguments *args);
+void pprompt(arguments *args, char *prompt);
 void error(arguments *args);
 
 /* string */
