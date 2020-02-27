@@ -9,11 +9,12 @@
  */
 char *heredoc(arguments *args, char *lineptr, size_t i)
 {
-	char buf[BUFSIZ] = {0};
-	int fd;
+	char *buf = NULL;
 	static char *file = "/tmp/tmp_file.txt";
 	char *term_char = strtok(lineptr + i + 1, " \t\n");
-	size_t read_size;
+	int fd;
+	ssize_t read_size;
+	size_t s = 0;
 
 	fd = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0666);
 	if (fd == -1)
@@ -23,14 +24,15 @@ char *heredoc(arguments *args, char *lineptr, size_t i)
 	}
 	while (1)
 	{
-		write(STDOUT_FILENO, "> ", 2);
-		read_size = read(STDIN_FILENO, &buf, BUFSIZ);
-		if (!_strncmp(buf, term_char, _strlen(term_char)) &&
-		    _strlen(term_char) == _strlen(buf) - 1)
+		pprompt(args, ">");
+		read_size = getline(&buf, &s, stdin);
+		if ((read_size == -1 || read_size == 0) ||
+		    (!_strncmp(buf, term_char, _strlen(term_char)) &&
+		     _strlen(term_char) == _strlen(buf) - 1))
 			break;
 		write(fd, buf, read_size);
-		_memset(buf, 0, BUFSIZ);
 	}
+	free(buf);
 	close(fd);
 	return (file);
 }

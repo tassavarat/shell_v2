@@ -41,14 +41,15 @@ void error(arguments *args)
 /**
  * pprompt - prints prompt
  * @args: arguments structure
+ * @prompt: specifies what prompt to print
  */
-void pprompt(arguments *args)
+void pprompt(arguments *args, char *prompt)
 {
 	(void) args;
 
 	if (isatty(STDIN_FILENO))
 	{
-		fprintf(stderr, "$ ");
+		fprintf(stderr, "%s ", prompt);
 		args->exitstr = "\n";
 	}
 }
