@@ -12,6 +12,7 @@ void clean_redirection(arguments *args, int *fds)
 	(void) args;
 	dup2(fds[1], fds[2]);
 	close(fds[0]);
+	unlink("/tmp/tmp_file.txt");
 }
 
 /**
