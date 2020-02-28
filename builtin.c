@@ -118,6 +118,10 @@ int builtins(arguments *args)
 			stat = func_arr[i].f(args);
 			if (!stat)
 				args->exit_status = 0;
+			if (args->pstat == 1)
+				close(args->pipefd[1]);
+			else if (args->pstat == 0)
+				close(args->pipefd[0]);
 			return (0);
 		}
 	return (1);
