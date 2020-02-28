@@ -37,7 +37,7 @@ void chain_pipe(arguments *args, char *lineptr,
 	fd[0] = dup(STDIN_FILENO);
 	dup2(args->pipefd[0], STDIN_FILENO);
 
-	if (pstat)
+	if (pstat == 1)
 	{
 		close(args->pipefd[0]);
 		write_pipe(args, lineptr, fd, operator);
