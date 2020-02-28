@@ -69,15 +69,6 @@ void parse_operators(arguments *args, char *lineptr)
 				operator = lineptr[i]; /* Handles second & or | */
 				line_pos = i + 1;
 			}
-			else if (lineptr[i] == '|')
-			{
-				lineptr[i] = '\0';
-				operator != 'p'
-					? write_pipe(args, lineptr + line_pos, fd, &operator)
-					: chain_pipe(args, lineptr + line_pos, fd, &operator, 1);
-				line_pos = i + 1;
-
-			}
 			else if (lineptr[i] == ';' ||
 				 !_strncmp(lineptr + i, "&&", 2) ||
 					!_strncmp(lineptr + i, "||", 2))
@@ -86,6 +77,15 @@ void parse_operators(arguments *args, char *lineptr)
 				if (check_operator(args, operator))
 					shell_run(args, lineptr + line_pos);
 				line_pos = i + 1;
+			}
+			else if (lineptr[i] == '|')
+			{
+				lineptr[i] = '\0';
+				operator != 'p'
+					? write_pipe(args, lineptr + line_pos, fd, &operator)
+					: chain_pipe(args, lineptr + line_pos, fd, &operator, 1);
+				line_pos = i + 1;
+
 			}
 		}
 	if (operator == 'p')

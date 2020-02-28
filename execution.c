@@ -13,7 +13,7 @@ void shell_run(arguments *args, char *lineptr)
 	if (rstat == -1)
 		return;
 	args->tokarr = tokenise(lineptr);
-	var_expansion(args);
+	/* var_expansion(args); */
 	if (!args->tokarr)
 		return;
 	if (builtins(args))
