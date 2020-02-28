@@ -34,6 +34,19 @@ int is_comment(char *lineptr, size_t i)
 }
 
 /**
+ * check_operator - check whether run the command or not
+ * @args: arguments struct
+ * @operator: tells which operator it is, &&, ||, or ;
+ * Return: 1 if the command if allowed to run, 0 otherwise
+*/
+int check_operator(arguments *args, char operator)
+{
+	return (operator == ';' || (operator == '&' && !args->exit_status)
+		|| (operator == '|' && args->exit_status));
+}
+
+
+/**
  * parse_operators - parses logical operators
  * Description:
  * @args: arguments struct
@@ -46,7 +59,6 @@ void parse_operators(arguments *args, char *lineptr)
 	int fd[2];
 
 	for (i = 0; lineptr[i]; ++i)
-	{
 		if (no_quote(lineptr, i, &quote))
 		{
 			if (is_comment(lineptr, i))
@@ -57,67 +69,28 @@ void parse_operators(arguments *args, char *lineptr)
 				operator = lineptr[i]; /* Handles second & or | */
 				line_pos = i + 1;
 			}
-			else if (lineptr[i] == '|' && operator != 'p')
-			{
-				operator = 'p';
-				args->pstat = 1;
-				lineptr[i] = '\0';
-				if (pipe(args->pipefd) == -1)
-				{
-					perror("pipe");
-					exit(EXIT_FAILURE);
-				}
-				fd[1] = dup(STDOUT_FILENO);
-				dup2(args->pipefd[1], STDOUT_FILENO);
-				shell_run(args, lineptr + line_pos);
-				dup2(fd[1], STDOUT_FILENO);
-				close(fd[1]);
-				line_pos = i + 1;
-			}
-			else if (lineptr[i] == '|' && operator == 'p')
+			else if (lineptr[i] == '|')
 			{
 				lineptr[i] = '\0';
-				args->pstat = 1;
-				fd[0] = dup(STDIN_FILENO);
-				dup2(args->pipefd[0], STDIN_FILENO);
-				close(args->pipefd[0]);
-				if (pipe(args->pipefd) == -1)
-				{
-					perror("pipe");
-					exit(EXIT_FAILURE);
-				}
-				fd[1] = dup(STDOUT_FILENO);
-				dup2(args->pipefd[1], STDOUT_FILENO);
-				shell_run(args, lineptr + line_pos);
-				dup2(fd[1], STDOUT_FILENO);
+				operator != 'p'
+					? write_pipe(args, lineptr + line_pos, fd, &operator)
+					: chain_pipe(args, lineptr + line_pos, fd, &operator, 1);
 				line_pos = i + 1;
-				dup2(fd[0], STDIN_FILENO);
-				close(fd[0]);
-				close(fd[1]);
+
 			}
 			else if (lineptr[i] == ';' ||
-					!_strncmp(lineptr + i, "&&", 2) ||
+				 !_strncmp(lineptr + i, "&&", 2) ||
 					!_strncmp(lineptr + i, "||", 2))
 			{
 				lineptr[i] = '\0';
-				if (operator == ';' || (operator == '&' && !args->exit_status)
-						|| (operator == '|' && args->exit_status))
+				if (check_operator(args, operator))
 					shell_run(args, lineptr + line_pos);
 				line_pos = i + 1;
 			}
 		}
-	}
 	if (operator == 'p')
-	{
-		args->pstat = 0;
-		fd[0] = dup(STDIN_FILENO);
-		dup2(args->pipefd[0], STDIN_FILENO);
-		shell_run(args, lineptr + line_pos);
-		dup2(fd[0], STDIN_FILENO);
-		close(fd[0]);
-	}
-	else if (operator == ';' || (operator == '&' && !args->exit_status)
-			|| (operator == '|' && args->exit_status))
+		chain_pipe(args, lineptr + line_pos, fd, &operator, 0);
+	else if (check_operator(args, operator))
 		shell_run(args, lineptr + line_pos); /* Default behaviour */
 }
 

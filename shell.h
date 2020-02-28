@@ -42,6 +42,8 @@ typedef struct list
  * @exit_status: exit value
  * @cmdnum: current command number
  * @errstr: Error string
+ * @pipefd: pipe descriptors
+ * @pstat: flag to know which end of @pipefd to close
  */
 typedef struct arguments
 {
@@ -53,7 +55,6 @@ typedef struct arguments
 	int exit_status;
 	size_t cmdnum;
 	char *errstr;
-	size_t cmdcnt;
 	int pipefd[2];
 	int pstat;
 } arguments;
@@ -142,6 +143,8 @@ void clean_redirection(arguments *args, int *fds);
 char *heredoc(arguments *args, char *lineptr, size_t i);
 
 /* pipe */
-int check_pipe(arguments *args, char *lineptr);
+void write_pipe(arguments *args, char *lineptr, int *fd, char *operator);
+void chain_pipe(arguments *args, char *lineptr,
+		int *fd, char *operator, int pstat);
 
 #endif /* SHELL_H */
