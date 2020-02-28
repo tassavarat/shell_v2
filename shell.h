@@ -138,14 +138,14 @@ int check_redirection(arguments *args, char *lineptr, int *fds);
 int stdout_redirection(arguments *args, char *lineptr, size_t i, int *fds);
 int stdin_redirection(arguments *args, char *lineptr, size_t i, int *fds);
 int check_redirect_errs(arguments *args, int *fds, int flags, char *file,
-			int is_valid, int which_redirect);
+		int is_valid, int which_redirect);
 void clean_redirection(arguments *args, int *fds);
 char *heredoc(arguments *args, char *lineptr, size_t i);
 
 /* pipe */
 void write_pipe(arguments *args, char *lineptr, int *fd, char *operator);
-void chain_pipe(arguments *args, char *lineptr,
-		int *fd, char *operator, int pstat);
+void chain_pipe(arguments *args, char *lineptr, int *fd, char *operator,
+		int pstat);
 
 void var_expansion(arguments *args);
 #endif /* SHELL_H */
