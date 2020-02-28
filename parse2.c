@@ -43,7 +43,7 @@ void parse_operators(arguments *args, char *lineptr)
 {
 	char quote = 0, operator = ';';
 	size_t i, line_pos = 0;
-	int pipefd[2], fd[2];
+	int fd[2];
 
 	for (i = 0; lineptr[i]; ++i)
 	{
@@ -62,13 +62,13 @@ void parse_operators(arguments *args, char *lineptr)
 				operator = 'p';
 				args->pstat = 1;
 				lineptr[i] = '\0';
-				if (pipe(pipefd) == -1)
+				if (pipe(args->pipefd) == -1)
 				{
 					perror("pipe");
 					exit(EXIT_FAILURE);
 				}
 				fd[1] = dup(STDOUT_FILENO);
-				dup2(pipefd[1], STDOUT_FILENO);
+				dup2(args->pipefd[1], STDOUT_FILENO);
 				shell_run(args, lineptr + line_pos);
 				dup2(fd[1], STDOUT_FILENO);
 				line_pos = i + 1;
@@ -77,7 +77,7 @@ void parse_operators(arguments *args, char *lineptr)
 			{
 				args->pstat = 0;
 				fd[0] = dup(STDIN_FILENO);
-				dup2(pipefd[0], STDIN_FILENO);
+				dup2(args->pipefd[0], STDIN_FILENO);
 				shell_run(args, lineptr + line_pos);
 				dup2(fd[0], STDIN_FILENO);
 				/* close(fd[0]); */
