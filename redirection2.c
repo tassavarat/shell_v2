@@ -36,3 +36,43 @@ char *heredoc(arguments *args, char *lineptr, size_t i)
 	close(fd);
 	return (file);
 }
+
+/**
+ * var_expansion - Looks for variables in the current
+ * environmental  * variables
+ * @args: An array of tokenized commands
+ */
+void var_expansion(arguments *args)
+{
+	int i = 0, j = 0, flag = 0, len = 0;
+	static char *n = "Hello";
+
+	while ((args->tokarr)[i])
+	{
+
+		if (*((args->tokarr))[i] == '$')
+		{
+			flag = 1;
+			break;
+		}
+		i++;
+	}
+	if (flag)
+	{
+		((args->tokarr))[i]++;
+		len = _strlen(((args->tokarr))[i]);
+		while (environ[j])
+		{
+			if (!_strncmp(((args->tokarr))[i], environ[j], len))
+			{
+				((args->tokarr))[i] = environ[j] + len + 1;
+				break;
+			}
+			j++;
+		}
+	}
+	else if (flag && !_strcmp(args->tokarr[i], "?"))
+	{
+		args->tokarr[i] = n;
+	}
+}

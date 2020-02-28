@@ -147,4 +147,5 @@ void write_pipe(arguments *args, char *lineptr, int *fd, char *operator);
 void chain_pipe(arguments *args, char *lineptr,
 		int *fd, char *operator, int pstat);
 
+void var_expansion(arguments *args);
 #endif /* SHELL_H */
