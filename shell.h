@@ -54,6 +54,8 @@ typedef struct arguments
 	size_t cmdnum;
 	char *errstr;
 	size_t cmdcnt;
+	int pipefd[2];
+	int pstat;
 } arguments;
 
 extern char **environ;

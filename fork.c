@@ -74,6 +74,11 @@ void forkproc(arguments *args, char *exec)
 	else if (pid == 0)
 	{
 		envlist = ltoa(args->env);
+		if (args->pipefd[0] != 0)
+		{
+			close(args->pipefd[0]);
+			close(args->pipefd[1]);
+		}
 		if (execve(exec, args->tokarr, envlist))
 		{
 			free(envlist);
@@ -83,6 +88,10 @@ void forkproc(arguments *args, char *exec)
 	}
 	else
 	{
+		if (args->pstat == 1)
+			close(args->pipefd[1]);
+		else if (args->pstat == 0)
+			close(args->pipefd[0]);
 		waitpid(-1, &wstatus, 0);
 		if (WIFEXITED(wstatus))
 			args->exit_status = WEXITSTATUS(wstatus);

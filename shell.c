@@ -78,6 +78,9 @@ int initparam(arguments *args, const int ac, char **av)
 	args->cmdnum = 1;
 	args->errstr = "";
 	args->cmdcnt = 1;
+	args->pipefd[0] = 0;
+	args->pipefd[1] = 0;
+	args->pstat = -1;
 	return (EXIT_SUCCESS);
 }
 
