@@ -42,3 +42,6 @@ memfull: all
 
 test: all
 	cp $(NAME) shell_v2_checker/ && cd shell_v2_checker && ./start.bash
+
+crun: clean, all
+	@./$(NAME)
