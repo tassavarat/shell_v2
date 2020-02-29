@@ -148,4 +148,5 @@ void chain_pipe(arguments *args, char *lineptr, int *fd, char *operator,
 		int pstat);
 
 void var_expansion(arguments *args);
+char *convert(unsigned int num, int base);
 #endif /* SHELL_H */

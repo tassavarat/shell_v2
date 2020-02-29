@@ -13,9 +13,9 @@ void shell_run(arguments *args, char *lineptr)
 	if (rstat == -1)
 		return;
 	args->tokarr = tokenise(lineptr);
-	/* var_expansion(args); */
 	if (!args->tokarr)
 		return;
+	var_expansion(args);
 	if (builtins(args))
 		create_process(args);
 	cleanup(args, 'L');

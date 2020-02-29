@@ -67,3 +67,41 @@ char *_getenv(char *name, arguments *args)
 	}
 	return (NULL);
 }
+
+/**
+ * var_expansion - Looks for variables in the current
+ * environmental  * variables
+ * @args: An array of tokenized commands
+ */
+void var_expansion(arguments *args)
+{
+	int i, len = 0;
+	list *env = args->env;
+
+	for (i = 0; args->tokarr[i]; i++)
+	{
+		if (args->tokarr[i][0] == '$')
+		{
+			if (args->tokarr[i][1] == '?')
+				args->tokarr[i] = convert(args->exit_status, 10);
+			else if (args->tokarr[i][1] == '$')
+				args->tokarr[i] = convert(getpid(), 10);
+			else
+			{
+				args->tokarr[i]++;
+				len = _strlen(args->tokarr[i]);
+				for (env = args->env; env; env = env->next)
+				{
+					if (!_strncmp(args->tokarr[i], env->str, len))
+					{
+						args->tokarr[i] = env->str;
+						break;
+					}
+					if (!env->next)
+						args->tokarr[i] = NULL;
+				}
+
+			}
+		}
+	}
+}
