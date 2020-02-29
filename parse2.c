@@ -81,6 +81,8 @@ void parse_operators(arguments *args, char *lineptr)
 			else if (lineptr[i] == '|')
 			{
 				lineptr[i] = '\0';
+				if (args->exit_status && operator == 'p')
+					continue;
 				operator != 'p'
 					? write_pipe(args, lineptr + line_pos, fd, &operator)
 					: chain_pipe(args, lineptr + line_pos, fd, &operator, 1);
