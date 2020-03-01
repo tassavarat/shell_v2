@@ -10,11 +10,7 @@ int choose_fd(arguments *args)
 	int fd = STDIN_FILENO;
 
 	if (args->ac == 2)
-	{
 		fd = open(args->av[1], O_RDONLY);
-		if (fd == -1)
-			error(args);
-	}
 
 	return (fd);
 }

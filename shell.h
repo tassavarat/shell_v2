@@ -157,4 +157,5 @@ void var_expansion(arguments *args);
 /* Descriptors */
 int choose_fd(arguments *args);
 
+void free_list(list *head);
 #endif /* SHELL_H */

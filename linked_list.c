@@ -68,7 +68,7 @@ void free_list(list *head)
 
 	if (head == NULL)
 		return;
-	while (current_addr->next != NULL)
+	while (current_addr != NULL)
 	{
 		free(current_addr->str);
 		next_addr = current_addr->next;
@@ -109,4 +109,3 @@ list *add_node_end(list **head, const char *str)
 	}
 	return (new);
 }
-

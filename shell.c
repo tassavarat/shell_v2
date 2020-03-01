@@ -70,6 +70,7 @@ int initparam(arguments *args, const int ac, char **av)
 	args->fd = choose_fd(args);
 	if (!args->env || args->fd == -1)
 	{
+		free_list(args->env);
 		args->exit_status = EXIT_FAILURE;
 		return (EXIT_FAILURE);
 	}
