@@ -66,16 +66,17 @@ int initparam(arguments *args, const int ac, char **av)
 	args->av = av;
 	args->exitstr = "";
 	args->tokarr = NULL;
+	args->cmdnum = 1;
 	args->env = envlist();
 	args->fd = choose_fd(args);
 	if (!args->env || args->fd == -1)
 	{
 		free_list(args->env);
-		args->exit_status = EXIT_FAILURE;
+		if (!args->env)
+			args->exit_status = EXIT_FAILURE;
 		return (EXIT_FAILURE);
 	}
 	args->exit_status = EXIT_SUCCESS;
-	args->cmdnum = 1;
 	args->errstr = "";
 	args->pipefd[0] = 0;
 	args->pipefd[1] = 0;
