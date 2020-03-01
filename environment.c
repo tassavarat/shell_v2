@@ -90,11 +90,16 @@ void var_expansion(arguments *args)
 			{
 				args->tokarr[i]++;
 				len = _strlen(args->tokarr[i]);
+				if (!len)
+				{
+					args->tokarr[i]--;
+					continue;
+				}
 				for (env = args->env; env; env = env->next)
 				{
 					if (!_strncmp(args->tokarr[i], env->str, len))
 					{
-						args->tokarr[i] = env->str;
+						args->tokarr[i] = env->str + len + 1;
 						break;
 					}
 					if (!env->next)

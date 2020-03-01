@@ -39,12 +39,65 @@ void error(arguments *args)
 }
 
 /**
+ * build_prompt - reads prompt from PS1
+ * @args: arguments structure
+ * @buf: buffer
+ */
+void build_prompt(arguments *args, char *buf)
+{
+	char *ps1 = _getenv("PS1=", args);
+	/* char *home = _getenv("HOME=", args); */
+	size_t i, buf_pos = 0;
+	/* struct tm *t; */
+
+	if (!ps1)
+		return;
+	for (i = 1; ps1[i]; ++i)
+	{
+		if (ps1[i] == '\\')
+		{
+			++i;
+			switch (ps1[i])
+			{
+			case 'd':
+				fprintf(stdout, "Handle time");
+				break;
+			case 'H':
+				gethostname(buf + buf_pos, PATH_MAX - buf_pos);
+				break;
+			case 's':
+				break;
+			case 'u':
+				break;
+			case 'w':
+				break;
+			default:
+				buf[buf_pos++] = ps1[i - 1];
+				buf[buf_pos++] = ps1[i];
+			}
+		}
+		else
+		{
+			buf[buf_pos++] = ps1[i];
+		}
+	}
+}
+
+/**
  * pprompt - prints prompt
  * @args: arguments structure
  * @prompt: specifies what prompt to print
  */
 void pprompt(arguments *args, char *prompt)
 {
+	/* char buf[PATH_MAX] = {0}; */
+
+	/* if (*prompt == '$') */
+	/* { */
+	/*	build_prompt(args, buf); */
+	/*	fprintf(stderr, "%s", buf); */
+	/*	args->exitstr = "\n"; */
+	/* } */
 	if (isatty(STDIN_FILENO) && !args->fd)
 	{
 		fprintf(stderr, "%s ", prompt);
