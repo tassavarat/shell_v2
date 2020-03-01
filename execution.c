@@ -30,22 +30,19 @@ void shell_run(arguments *args, char *lineptr)
 void shell(arguments *args)
 {
 	char *lineptr = NULL;
-	size_t n;
-	ssize_t byterd = 0;
 
 	while (1)
 	{
 		pprompt(args, "$");
-		byterd = getline(&lineptr, &n, stdin);
-		/* if (byterd == EOF || syntaxerr(lineptr)) FIXME*/
-		if (byterd == EOF)
+		lineptr = _getline(args->fd);
+		if (!lineptr)
 		{
-			/* printf("%s", args->exitstr); FIXME: printf */
 			_puts(args->exitstr);
 			free(lineptr);
 			return;
 		}
 		parse_operators(args, lineptr);
+		free(lineptr);
 		++args->cmdnum;
 	}
 }

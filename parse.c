@@ -122,6 +122,7 @@ void cleanup(arguments *args, char mode)
 		free(tmp->str);
 		free(tmp);
 	}
+	_getline(-1);
 	args->env = NULL;
 }
 

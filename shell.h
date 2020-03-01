@@ -16,6 +16,7 @@
 #include <sys/wait.h>
 #include <time.h>
 #include <unistd.h>
+#include "_getline.h"
 
 #define EXITERR 100
 #define CDERR 101
@@ -44,6 +45,7 @@ typedef struct list
  * @errstr: Error string
  * @pipefd: pipe descriptors
  * @pstat: flag to know which end of @pipefd to close
+ * @fd: file descriptor where input will be taken
  */
 typedef struct arguments
 {
@@ -57,6 +59,7 @@ typedef struct arguments
 	char *errstr;
 	int pipefd[2];
 	int pstat;
+	int fd;
 } arguments;
 
 extern char **environ;
@@ -89,6 +92,8 @@ char *_memset(char *s, char b, unsigned int n);
 char *_strncpy(char *dest, char *src, int n);
 int is_digit(char n);
 int _puts(char *str);
+char *convert(unsigned int num, int base);
+char *strsrch(char *s, char c, size_t len);
 
 /* environment */
 char *_getenv(char *name, arguments *args);
@@ -148,5 +153,8 @@ void chain_pipe(arguments *args, char *lineptr, int *fd, char *operator,
 		int pstat);
 
 void var_expansion(arguments *args);
-char *convert(unsigned int num, int base);
+
+/* Descriptors */
+int choose_fd(arguments *args);
+
 #endif /* SHELL_H */

@@ -45,9 +45,7 @@ void error(arguments *args)
  */
 void pprompt(arguments *args, char *prompt)
 {
-	(void) args;
-
-	if (isatty(STDIN_FILENO))
+	if (isatty(STDIN_FILENO) && !args->fd)
 	{
 		fprintf(stderr, "%s ", prompt);
 		args->exitstr = "\n";
@@ -69,7 +67,8 @@ int initparam(arguments *args, const int ac, char **av)
 	args->exitstr = "";
 	args->tokarr = NULL;
 	args->env = envlist();
-	if (!args->env)
+	args->fd = choose_fd(args);
+	if (!args->env || args->fd == -1)
 	{
 		args->exit_status = EXIT_FAILURE;
 		return (EXIT_FAILURE);
