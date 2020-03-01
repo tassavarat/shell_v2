@@ -2,7 +2,7 @@
 
 /**
  * choose_fd - specifies from which fd to get the input
- * @args: arhuments struct
+ * @args: arguments struct
  * Return: fd of the file or STDIN_FILENO
 */
 int choose_fd(arguments *args)
@@ -20,4 +20,30 @@ int choose_fd(arguments *args)
 	}
 
 	return (fd);
+}
+
+/**
+ * read_config - reads .hshrc config file
+ * @args: arguments struct
+*/
+void read_config(arguments *args)
+{
+	char *home = _getenv("HOME=", args);
+	char *conf = ".hshrc";
+	char buf[PATH_MAX] = {0};
+	int fd, backup_fd;
+
+	if (!home)
+		return;
+
+	backup_fd = args->fd;
+	sprintf(buf, "%s/%s", home, conf);
+	fd = open(buf, O_CREAT | O_RDONLY, 0666);
+	args->fd = fd;
+	if (fd != -1)
+	{
+		shell(args);
+	}
+	args->fd = backup_fd;
+	args->cmdnum = 0;
 }
