@@ -1,4 +1,5 @@
 #include "_getline.h"
+#include "shell.h"
 
 static int failure;
 
@@ -27,7 +28,7 @@ descriptor_t *get_fd(descriptor_t **head, int fd)
 
 	node->fd = fd;
 	node->next = NULL;
-	memset(node->buf, 0, READ_SIZE);
+	_memset(node->buf, 0, READ_SIZE);
 	node->pos = 0;
 	if (!*head)
 		*head = node;
@@ -97,9 +98,9 @@ char *flush_buffer(char *line, size_t *pos, size_t *size,
 		if (!line)
 			return (NULL);
 		*size += READ_SIZE;
-		memset(line + *pos + need, 0, READ_SIZE - need + 1);
+		_memset(line + *pos + need, 0, READ_SIZE - need + 1);
 	}
-	memcpy(line + *pos, desc->buf + desc->pos, need);
+	_memcpy(line + *pos, desc->buf + desc->pos, need);
 	*pos += need;
 	return (line);
 }
@@ -129,7 +130,7 @@ char *read_descriptor(descriptor_t *desc)
 			}
 			old_val = read_val, read_val = read(desc->fd, desc->buf, READ_SIZE);
 			if (read_val < READ_SIZE)
-				memset(desc->buf + (read_val), 0, (READ_SIZE - read_val));
+				_memset(desc->buf + (read_val), 0, (READ_SIZE - read_val));
 			if (read_val < 1)
 			{
 				if (read_val == 0 && line && old_val > 0)

@@ -94,6 +94,7 @@ int is_digit(char n);
 int _puts(char *str);
 char *convert(unsigned int num, int base);
 char *strsrch(char *s, char c, size_t len);
+char *_memcpy(char *dest, char *src, unsigned int n);
 
 /* environment */
 char *_getenv(char *name, arguments *args);
