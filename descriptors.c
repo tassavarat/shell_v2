@@ -14,7 +14,8 @@ int choose_fd(arguments *args)
 		fd = open(args->av[1], O_RDONLY);
 		if (fd == -1)
 		{
-			fprintf(stderr, "%s: %lu: Can't open file\n", *args->av, args->cmdnum - 1);
+			fprintf(stderr, "%s: %lu: Can't open %s\n", *args->av,
+				args->cmdnum - 1, args->av[1]);
 			args->exit_status = 127;
 		}
 	}
@@ -38,12 +39,12 @@ void read_config(arguments *args)
 
 	backup_fd = args->fd;
 	sprintf(buf, "%s/%s", home, conf);
-	fd = open(buf, O_CREAT | O_RDONLY, 0666);
+	fd = open(buf, O_RDONLY);
 	args->fd = fd;
 	if (fd != -1)
 	{
 		shell(args);
 	}
 	args->fd = backup_fd;
-	args->cmdnum = 0;
+	args->cmdnum = 1;
 }
