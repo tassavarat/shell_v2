@@ -8,6 +8,7 @@ NAME = hsh
 # Find all c files in current directory and substitute
 # extension with object files (.o)
 OBJ = $(patsubst %.c,%.o, $(wildcard *.c))
+HEADERS = $(wildcard *.h)
 LINTER = betty
 
 # Compile object files only when they are modified,
@@ -19,7 +20,7 @@ LINTER = betty
 all: $(NAME)
 
 # Compile executable from object files
-$(NAME): $(OBJ)
+$(NAME): $(OBJ) $(HEADERS)
 	$(CC) -o $@ $^ $(CFLAGS)
 
 .PHONY: clean, run, check, memcheck, memfull, test
