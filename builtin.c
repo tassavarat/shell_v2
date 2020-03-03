@@ -109,6 +109,7 @@ int builtins(arguments *args)
 		{"setenv", _setenv},
 		{"unsetenv", _unsetenv},
 		{"help", help},
+		{"alias", alias},
 		{NULL, NULL}
 	};
 

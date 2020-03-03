@@ -75,6 +75,13 @@ typedef struct built_ins
 	int (*f)(arguments *args);
 } built_ins;
 
+typedef struct aliases
+{
+	char *name;
+	char *value;
+	struct aliases *next;
+} aliases;
+
 /* shell */
 int initparam(arguments *args, const int ac, char **av);
 void pprompt(arguments *args, char *prompt);
@@ -160,4 +167,8 @@ int choose_fd(arguments *args);
 void read_config(arguments *args);
 
 void free_list(list *head);
+
+/* alias */
+int alias(arguments *args);
+
 #endif /* SHELL_H */
