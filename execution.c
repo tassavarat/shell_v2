@@ -15,6 +15,7 @@ void shell_run(arguments *args, char *lineptr)
 	args->tokarr = tokenise(lineptr);
 	if (!args->tokarr)
 		return;
+	checkalias(args);
 	var_expansion(args);
 	if (builtins(args))
 		create_process(args);
