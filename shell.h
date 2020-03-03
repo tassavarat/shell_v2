@@ -46,6 +46,7 @@ typedef struct list
  * @pipefd: pipe descriptors
  * @pstat: flag to know which end of @pipefd to close
  * @fd: file descriptor where input will be taken
+ * @head: pointer to aliases head node
  */
 typedef struct arguments
 {
@@ -60,6 +61,7 @@ typedef struct arguments
 	int pipefd[2];
 	int pstat;
 	int fd;
+	struct aliases *head;
 } arguments;
 
 extern char **environ;
@@ -75,6 +77,12 @@ typedef struct built_ins
 	int (*f)(arguments *args);
 } built_ins;
 
+/**
+ * struct aliases - link lists of aliases and their values
+ * @name: name of alias
+ * @value: alias value
+ * @next: pointer to next node
+ */
 typedef struct aliases
 {
 	char *name;
@@ -170,5 +178,7 @@ void free_list(list *head);
 
 /* alias */
 int alias(arguments *args);
+void delalias(aliases *head);
+void checkalias(arguments *args);
 
 #endif /* SHELL_H */

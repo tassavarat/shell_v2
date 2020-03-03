@@ -134,6 +134,7 @@ int initparam(arguments *args, const int ac, char **av)
 	args->pipefd[0] = 0;
 	args->pipefd[1] = 0;
 	args->pstat = -1;
+	args->head = NULL;
 	return (EXIT_SUCCESS);
 }
 

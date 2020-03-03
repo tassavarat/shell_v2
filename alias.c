@@ -1,6 +1,21 @@
 #include "shell.h"
 
 /**
+ * checkalias - checks for alias match and replaces as needed
+ * @args: arguments structure
+ */
+void checkalias(arguments *args)
+{
+	size_t i;
+	aliases *cur;
+
+	for (i = 0; args->tokarr[i]; ++i)
+		for (cur = args->head; cur; cur = cur->next)
+			if (!_strcmp(args->tokarr[i], cur->name))
+				args->tokarr[i] = cur->value;
+}
+
+/**
  * delalias - frees aliases linked list
  * @head: pointer to head node
  */
@@ -87,7 +102,6 @@ aliases *aliasnode(aliases **head, char *tokarr)
 int alias(arguments *args)
 {
 	size_t i, j;
-	static aliases *head;
 	int new_alias, stat;
 
 	new_alias = stat = 0;
@@ -96,7 +110,7 @@ int alias(arguments *args)
 		for (j = 0; args->tokarr[i][j]; ++j)
 			if (args->tokarr[i][j] == '=')
 			{
-				aliasnode(&head, args->tokarr[i]);
+				aliasnode(&args->head, args->tokarr[i]);
 				new_alias = 1;
 				break;
 			}
@@ -105,11 +119,11 @@ int alias(arguments *args)
 			/* should return 1 if single alias not found or */
 			/* overwrite with 0 if another alias further along */
 			/* tokarr found? */
-			stat = printalias(head, args->tokarr[i]);
+			stat = printalias(args->head, args->tokarr[i]);
 			new_alias = 0;
 		}
 	}
 	if (i == 1)
-		stat = printalias(head, NULL);
+		stat = printalias(args->head, NULL);
 	return (stat);
 }

@@ -124,6 +124,7 @@ void cleanup(arguments *args, char mode)
 	}
 	_getline(-1);
 	args->env = NULL;
+	delalias(args->head);
 }
 
 /**
