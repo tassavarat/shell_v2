@@ -72,23 +72,33 @@ aliases *aliasnode(aliases **head, char *tokarr)
 {
 	aliases *new;
 	char *token, *s;
+	int new_alias;
 
-	new = malloc(sizeof(*new));
-	if (!new)
-		return (NULL);
+	new_alias = 0;
 	s = _strdup(tokarr);
 	if (!s)
 		return (NULL);
 	token = strtok(s, "=");
-	new->name = _strdup(token);
-	if (!new->name)
-		return (NULL);
+	new = overwrite(*head, token);
+	if (!new)
+	{
+		new_alias = 1;
+		new = malloc(sizeof(*new));
+		if (!new)
+			return (NULL);
+		new->name = _strdup(token);
+		if (!new->name)
+			return (NULL);
+	}
 	token = strtok(NULL, "=");
 	new->value = _strdup(token);
 	if (!new->value)
 		return (NULL);
-	new->next = *head;
-	*head = new;
+	if (new_alias)
+	{
+		new->next = *head;
+		*head = new;
+	}
 	free(s);
 	return (new);
 }
