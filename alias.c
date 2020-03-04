@@ -70,7 +70,7 @@ int printalias(aliases *head, char *s)
  */
 aliases *aliasnode(aliases **head, char *tokarr)
 {
-	aliases *new;
+	aliases *new, *cur;
 	char *token, *s;
 	int new_alias;
 
@@ -94,11 +94,19 @@ aliases *aliasnode(aliases **head, char *tokarr)
 	new->value = _strdup(token);
 	if (!new->value)
 		return (NULL);
-	if (new_alias)
+	if (new_alias && *head)
 	{
-		new->next = *head;
+		for (cur = *head; cur->next; cur = cur->next)
+			;
+		cur->next = new;
+		/* new->next = *head; */
+		/* *head = new; */
+	}
+	else
+	{
 		*head = new;
 	}
+	new->next = NULL;
 	free(s);
 	return (new);
 }
