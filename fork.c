@@ -113,11 +113,19 @@ void create_process(arguments *args)
 		? args->tokarr[0] : get_path(args);
 	if (!exec || access(exec, F_OK))
 	{
+		if (args->pstat == 1)
+			close(args->pipefd[1]);
+		else if (args->pstat == 0)
+			close(args->pipefd[0]);
 		errno = ENOENT;
 		error(args);
 	}
 	else if (access(exec, X_OK | R_OK))
 	{
+		if (args->pstat == 1)
+			close(args->pipefd[1]);
+		else if (args->pstat == 0)
+			close(args->pipefd[0]);
 		error(args);
 	}
 	else
