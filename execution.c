@@ -17,7 +17,10 @@ void shell_run(arguments *args, char *lineptr)
 		return;
 	var_expansion(args);
 	if (builtins(args))
+	{
+		checkalias(args);
 		create_process(args);
+	}
 	else
 		checkalias(args);
 	cleanup(args, 'L');

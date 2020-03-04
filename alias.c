@@ -125,13 +125,8 @@ int alias(arguments *args)
 				break;
 			}
 		if (!new_alias)
-		{
-			/* should return 1 if single alias not found or */
-			/* overwrite with 0 if another alias further along */
-			/* tokarr found? */
 			stat = printalias(args->head, args->tokarr[i]);
-			new_alias = 0;
-		}
+		new_alias = 0;
 	}
 	if (i == 1)
 		stat = printalias(args->head, NULL);
