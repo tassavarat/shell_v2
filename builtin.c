@@ -100,7 +100,7 @@ int clear_scr(arguments *args)
  */
 int builtins(arguments *args)
 {
-	size_t i;
+	size_t i, stat;
 	built_ins func_arr[] = {
 		{"cd", changedir},
 		{"env", penv},
@@ -116,7 +116,9 @@ int builtins(arguments *args)
 	for (i = 0; func_arr[i].bi; ++i)
 		if (!_strcmp(*args->tokarr, func_arr[i].bi))
 		{
-			args->exit_status = func_arr[i].f(args);
+			stat = func_arr[i].f(args);
+			if (!stat)
+				args->exit_status = 0;
 			if (args->pstat == 1)
 				close(args->pipefd[1]);
 			else if (args->pstat == 0)

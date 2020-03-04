@@ -133,5 +133,6 @@ int alias(arguments *args)
 	}
 	if (i == 1)
 		printalias(args->head, NULL);
+	args->exit_status = stat;
 	return (stat);
 }
