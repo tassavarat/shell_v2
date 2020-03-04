@@ -36,6 +36,7 @@ void shell(arguments *args)
 {
 	char *lineptr = NULL;
 
+	read_history(args);
 	while (1)
 	{
 		pprompt(args, "$");
@@ -46,6 +47,7 @@ void shell(arguments *args)
 			free(lineptr);
 			return;
 		}
+		en_queue(args->history, lineptr);
 		parse_operators(args, lineptr);
 		free(lineptr);
 		++args->cmdnum;

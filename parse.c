@@ -115,6 +115,7 @@ void cleanup(arguments *args, char mode)
 		free(*args->tokarr);
 	free(args->tokarr);
 	args->tokarr = NULL;
+	write_history(args);
 	while (args->env)
 	{
 		tmp = args->env;
@@ -125,6 +126,7 @@ void cleanup(arguments *args, char mode)
 	_getline(-1);
 	args->env = NULL;
 	delalias(args->head);
+	free_queue(&args->history);
 }
 
 /**

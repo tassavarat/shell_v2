@@ -21,6 +21,8 @@
 #define EXITERR 100
 #define CDERR 101
 #define ENVERR 102
+#define HISTORY_SIZE 1024
+#define HISTORY_FILE ".hsh_history"
 
 /**
  * struct list - singly linked list
@@ -32,6 +34,21 @@ typedef struct list
 	char *str;
 	struct list *next;
 } list;
+
+/**
+ * struct queue - Queue
+ * @size: size of queue
+ * @pos: position of history
+ * @first: first node
+ * @last: last node
+ */
+typedef struct queue
+{
+	size_t size;
+	size_t pos;
+	list *first;
+	list *last;
+} queue;
 
 /**
  * struct arguments - contains arguments used by functions
@@ -62,6 +79,7 @@ typedef struct arguments
 	int pstat;
 	int fd;
 	struct aliases *head;
+	queue *history;
 } arguments;
 
 extern char **environ;
@@ -182,5 +200,15 @@ void delalias(aliases *head);
 void checkalias(arguments *args);
 aliases *overwriteval(aliases *head, char *name);
 char *doublealias(aliases *head, char *value);
+
+/* queue */
+queue *create_queue();
+void en_queue(queue *queue, char *cmd);
+void free_queue(queue **q);
+
+/* history */
+int history(arguments *args);
+void write_history(arguments *args);
+void read_history(arguments *args);
 
 #endif /* SHELL_H */
