@@ -24,7 +24,7 @@ size_t envmatch(char *s, list *tmp, arguments *args)
 /**
  * _unsetenv - Unsets the specified environment variable
  * @args: Arugements structure
- * Return: 1 on success
+ * Return: 0 on success, 1 on error
  */
 int _unsetenv(arguments *args)
 {

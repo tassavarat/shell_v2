@@ -4,7 +4,7 @@
  * help - Display information about builtin commands
  * @args: Arguments structure
  *
- * Return: 1
+ * Return: 0
  */
 int help(arguments *args)
 {
@@ -17,7 +17,7 @@ int help(arguments *args)
 		_puts("Type 'help name' to find out more about the function 'name'.\n\n"
 		      "env\nexit [n]\ncd [dir]\nunsetenv [name]\nsetenv [name]\nhelp [pattern...]\n");
 	}
-	return (1);
+	return (0);
 }
 
 /**

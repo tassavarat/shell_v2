@@ -125,10 +125,13 @@ int alias(arguments *args)
 				break;
 			}
 		if (!new_alias)
-			stat = printalias(args->head, args->tokarr[i]);
+		{
+			if (printalias(args->head, args->tokarr[i]))
+				stat = 1;
+		}
 		new_alias = 0;
 	}
 	if (i == 1)
-		stat = printalias(args->head, NULL);
+		printalias(args->head, NULL);
 	return (stat);
 }
