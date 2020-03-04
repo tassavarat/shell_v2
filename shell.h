@@ -133,10 +133,12 @@ char *_memcpy(char *dest, char *src, unsigned int n);
 char *_getenv(char *name, arguments *args);
 list *envlist(void);
 char **ltoa(list *head);
+void var_expansion(arguments *args);
 
 /* linked_list */
 list *add_node_end(list **head, const char *str);
 size_t list_len(const list *h);
+void free_list(list *head);
 
 /* builtin */
 int builtins(arguments *args);
@@ -186,13 +188,9 @@ void write_pipe(arguments *args, char *lineptr, int *fd, char *operator);
 void chain_pipe(arguments *args, char *lineptr, int *fd, char *operator,
 		int pstat);
 
-void var_expansion(arguments *args);
-
 /* Descriptors */
 int choose_fd(arguments *args);
 void read_config(arguments *args);
-
-void free_list(list *head);
 
 /* alias */
 int alias(arguments *args);

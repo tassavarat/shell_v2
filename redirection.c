@@ -28,7 +28,6 @@ void clean_redirection(arguments *args, int *fds)
 int check_redirect_errs(arguments *args, int *fds, int flags, char *file,
 			int is_valid, int which_redirect)
 {
-
 	if (!file)
 	{
 		fprintf(stderr, "%s: %lu: ", *args->av, args->cmdnum);
@@ -80,7 +79,6 @@ int stdin_redirection(arguments *args, char *lineptr, size_t i, int *fds)
 
 	return (check_redirect_errs(args, fds, flags, file, 0, 0));
 }
-
 
 /**
  * stdout_redirection - handles stdout redirections

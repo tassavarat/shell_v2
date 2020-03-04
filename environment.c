@@ -105,7 +105,6 @@ void var_expansion(arguments *args)
 					if (!env->next)
 						args->tokarr[i] = NULL;
 				}
-
 			}
 		}
 	}

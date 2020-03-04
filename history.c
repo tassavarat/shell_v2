@@ -12,10 +12,7 @@ void read_history(arguments *args)
 	sprintf(buf, "%s/%s", home, HISTORY_FILE);
 	fd = open(buf, O_RDONLY);
 	if (fd == -1)
-	{
-		/* error(args); */
 		return;
-	}
 	while ((str = _getline(fd)))
 	{
 		en_queue(args->history, str);
