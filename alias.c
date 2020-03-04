@@ -99,14 +99,15 @@ aliases *aliasnode(aliases **head, char *tokarr)
 		for (cur = *head; cur->next; cur = cur->next)
 			;
 		cur->next = new;
+		new->next = NULL;
 		/* new->next = *head; */
 		/* *head = new; */
 	}
 	else
 	{
 		*head = new;
+		new->next = NULL;
 	}
-	new->next = NULL;
 	free(s);
 	return (new);
 }
