@@ -64,6 +64,7 @@ typedef struct queue
  * @pstat: flag to know which end of @pipefd to close
  * @fd: file descriptor where input will be taken
  * @head: pointer to aliases head node
+ * @history: pointer to head of queue linked list
  */
 typedef struct arguments
 {

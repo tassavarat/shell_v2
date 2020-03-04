@@ -1,7 +1,7 @@
 #include "shell.h"
 
 /**
- * create_queue - Creates an empty queue
+ * create_queue - creates an empty queue
  * Return: new queue
 */
 queue *create_queue()
@@ -21,7 +21,7 @@ queue *create_queue()
 /**
  * en_queue - en_queue
  * @queue: queue
- * @node: LL node
+ * @cmd: linked list node
  */
 void en_queue(queue *queue, char *cmd)
 {
@@ -57,7 +57,6 @@ void en_queue(queue *queue, char *cmd)
 /**
 * free_queue - frees a queue
 * @q: pointer to head of queue
-* Return: Nothing.
 */
 void free_queue(queue **q)
 {

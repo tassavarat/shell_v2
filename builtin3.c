@@ -1,5 +1,9 @@
 #include "shell.h"
 
+/**
+ * help3 - displays information about builtin commands
+ * @help_num: determines which help information to print
+ */
 void help3(int help_num)
 {
 	if (help_num == 0)
@@ -22,8 +26,8 @@ void help3(int help_num)
 }
 
 /**
- * help2 - Display information about builtin commands
- * @args: Arguments structure
+ * help2 - display information about builtin commands
+ * @args: arguments structure
  */
 void help2(arguments *args)
 {
@@ -67,8 +71,8 @@ void help2(arguments *args)
 }
 
 /**
- * help - Display information about builtin commands
- * @args: Arguments structure
+ * help - display information about builtin commands
+ * @args: arguments structure
  *
  * Return: 0
  */

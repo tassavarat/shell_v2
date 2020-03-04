@@ -1,5 +1,9 @@
 #include "shell.h"
 
+/**
+ * read_history - reads input command history from file
+ * @args: arguments structure
+ */
 void read_history(arguments *args)
 {
 	char *home = _getenv("HOME=", args);
@@ -21,7 +25,10 @@ void read_history(arguments *args)
 	close(fd);
 }
 
-
+/**
+ * write_history - writes input command history to file
+ * @args: arguments structure
+ */
 void write_history(arguments *args)
 {
 	char *home = _getenv("HOME=", args);
@@ -46,6 +53,12 @@ void write_history(arguments *args)
 	close(fd);
 }
 
+/**
+ * history - prints out shell input history preceded by command number
+ * @args: arguments structure
+ *
+ * Return: 0
+ */
 int history(arguments *args)
 {
 	list *cur = args->history->first;
