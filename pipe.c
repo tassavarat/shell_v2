@@ -5,7 +5,7 @@
  * @args: arguments struct
  * @lineptr: input string
  * @fd: duplicated STDIN and STDOUT
- * @operator: operator flag
+ * @op: operator flag
  */
 void write_pipe(arguments *args, char *lineptr, int *fd, char *op)
 {
@@ -28,7 +28,7 @@ void write_pipe(arguments *args, char *lineptr, int *fd, char *op)
  * @args: arguments struct
  * @lineptr: input string
  * @fd: duplicated STDIN and STDOUT
- * @operator: operator flag
+ * @op: operator flag
  * @pstat: tells which end of pipe to clean
  */
 void chain_pipe(arguments *args, char *lineptr, int *fd, char *op, int pstat)
