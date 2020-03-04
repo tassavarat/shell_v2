@@ -180,6 +180,7 @@ void free_list(list *head);
 int alias(arguments *args);
 void delalias(aliases *head);
 void checkalias(arguments *args);
-aliases *overwrite(aliases *head, char *s);
+aliases *overwriteval(aliases *head, char *name);
+char *doublealias(aliases *head, char *value);
 
 #endif /* SHELL_H */
