@@ -3,7 +3,7 @@
 [![Run on Repl.it](https://repl.it/badge/github/tassavarat/shell_v2)](https://repl.it/github/tassavarat/shell_v2)
 ## Overview
 
-**Simple Shell** - is a Holberton school group project. The task is to write a simple UNIX command interpreter.
+**Shell** - is a Holberton school group project. The task is to write a simple UNIX command interpreter.
 
 Table of contents
 =================
@@ -22,19 +22,23 @@ Table of contents
 
 *******************************************************************************
 
-## Installation
+## Installation and Compilation
 
-In order to use this Simple Shell function you need to clone this repository to your local machine
+In order to use the Shell, you need to clone this repository to your local machine
 ```
-$ git clone https://github.com/narnat/simple_shell.git
+$ git clone https://github.com/tassavarat/shell_v2.git
 ```
 After cloning go to the simple_shell folder
 ```
-$ cd simple_shell
+$ cd shell_v2
 ```
-You can compile it with your your C source code
+Run make to compile it
 ```
-$ gcc *.c hsh
+$ make
+```
+Run shell
+```
+./hsh
 ```
 *****************************************************************************************************
 
