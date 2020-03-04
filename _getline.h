@@ -7,7 +7,7 @@
 #include <limits.h>
 #include <string.h>
 
-#define READ_SIZE 512
+#define READ_SIZE BUFSIZ
 
 /**
  * struct descriptor_s - singly linked list  of file descriptors
