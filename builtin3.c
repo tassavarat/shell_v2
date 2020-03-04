@@ -1,23 +1,24 @@
 #include "shell.h"
 
-/**
- * help - Display information about builtin commands
- * @args: Arguments structure
- *
- * Return: 0
- */
-int help(arguments *args)
+void help3(int help_num)
 {
-	if (args->tokarr[1])
+	if (help_num == 0)
 	{
-		help2(args);
+		_puts("help: clear\n"
+				"    Clear the terminal screen\n\n"
+				"    Clears your screen if this is possible, including its scrollback buffer\n"
+				"    (if the extended “E3” capability is defined).  clear looks in the environment\n"
+				"    for the terminal type given by the environment variable TERM, and then in the\n"
+				"    terminfo database to determine how to clear the screen.\n");
 	}
-	else
+	else if (help_num == 1)
 	{
-		_puts("Type 'help name' to find out more about the function 'name'.\n\n"
-				"env\nexit [n]\ncd [dir]\nunsetenv [name]\nsetenv [name]\nhelp [pattern...]\n");
+		_puts("help: [alias-name[=string]...]\n"
+				"    Define or display aliases\n\n"
+				"    The alias utility shall create or redefine alias definitions or write the values\n"
+				"    of existing alias definitions to standard output. An  alias  definition  provides\n"
+				"    a string value that shall replace a command name when it is encountered\n");
 	}
-	return (0);
 }
 
 /**
@@ -57,6 +58,32 @@ void help2(arguments *args)
 				"    Displays brief summaries of builtin commands.\n\n"
 				"    If PATTERN is specified, give detailed help on all commands matching PATTERN,\n"
 				"    otherwise the list if help topics is printed.\n");
+	else if (!_strcmp(args->tokarr[1], "clear"))
+		help3(0);
+	else if (!_strcmp(args->tokarr[1], "alias"))
+		help3(1);
 	else
 		error(args);
+}
+
+/**
+ * help - Display information about builtin commands
+ * @args: Arguments structure
+ *
+ * Return: 0
+ */
+int help(arguments *args)
+{
+	if (args->tokarr[1])
+	{
+		help2(args);
+	}
+	else
+	{
+		_puts("Type 'help name' to find out more about the function 'name'.\n\n"
+				"env\nexit [n]\ncd [dir]\nunsetenv [name]\n"
+				"setenv [name]\nhelp [pattern...]\nclear\n"
+				"alias [name[=value] ... ]\n");
+	}
+	return (0);
 }
