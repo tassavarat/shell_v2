@@ -1,6 +1,5 @@
 # An implementation of sh in C programming language
 
-[![Build Status](https://travis-ci.org/joemccann/dillinger.svg?branch=master)](https://github.com/narnat/simple_shell)
 [![Run on Repl.it](https://repl.it/badge/github/tassavarat/shell_v2)](https://repl.it/github/tassavarat/shell_v2)
 ## Overview
 
