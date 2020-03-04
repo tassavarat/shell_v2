@@ -130,6 +130,7 @@ int initparam(arguments *args, const int ac, char **av)
 		return (EXIT_FAILURE);
 	}
 	args->exit_status = EXIT_SUCCESS;
+	args->history = create_queue();
 	args->errstr = "";
 	args->pipefd[0] = 0;
 	args->pipefd[1] = 0;

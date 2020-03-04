@@ -1,9 +1,9 @@
 #include "shell.h"
 
 /**
- * split_path - describe me
- * @str: string
- * Return: dir
+ * split_path - extracts one path at a time from path environmental variable
+ * @str: enviromental path string
+ * Return: path
  */
 char *split_path(char *str)
 {
