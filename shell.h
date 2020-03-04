@@ -91,7 +91,6 @@ typedef struct aliases
 } aliases;
 
 /* shell */
-int initparam(arguments *args, const int ac, char **av);
 void pprompt(arguments *args, char *prompt);
 void error(arguments *args);
 
@@ -115,39 +114,31 @@ char *_memcpy(char *dest, char *src, unsigned int n);
 char *_getenv(char *name, arguments *args);
 list *envlist(void);
 char **ltoa(list *head);
+void var_expansion(arguments *args);
 
 /* linked_list */
 list *add_node_end(list **head, const char *str);
 size_t list_len(const list *h);
+void free_list(list *head);
 
 /* builtin */
 int builtins(arguments *args);
-int clear_scr(arguments *args);
 int callexit(arguments *args);
-int penv(arguments *args);
-int changedir(arguments *args);
 int parsecd(arguments *args);
 int _setenv(arguments *args);
 int set_environment(list **env, char *name, char *value);
 int _unsetenv(arguments *args);
-size_t envmatch(char *s, list *tmp, arguments *args);
 void help2(arguments *args);
 int help(arguments *args);
 
 /* fork */
 void create_process(arguments *args);
-void forkproc(arguments *args, char *exec);
-char *get_path(arguments *args);
-char *split_path(char *str);
 
 /* parse */
 size_t wordcount(char *lineptr);
 void cleanup(arguments *args, char mode);
-int syntaxerr(char *lineptr);
-void checkerr(int *stat, char *errs, size_t *i, int incr);
 char **tokenise(char *lineptr);
 void parse_operators(arguments *args, char *lineptr);
-int is_comment(char *lineptr, size_t i);
 char no_quote(char *lineptr, size_t i, char *quote);
 
 /* execution */
@@ -156,25 +147,16 @@ void shell(arguments *args);
 
 /* redirection */
 int check_redirection(arguments *args, char *lineptr, int *fds);
-int stdout_redirection(arguments *args, char *lineptr, size_t i, int *fds);
-int stdin_redirection(arguments *args, char *lineptr, size_t i, int *fds);
-int check_redirect_errs(arguments *args, int *fds, int flags, char *file,
-		int is_valid, int which_redirect);
 void clean_redirection(arguments *args, int *fds);
 char *heredoc(arguments *args, char *lineptr, size_t i);
 
 /* pipe */
-void write_pipe(arguments *args, char *lineptr, int *fd, char *operator);
-void chain_pipe(arguments *args, char *lineptr, int *fd, char *operator,
-		int pstat);
-
-void var_expansion(arguments *args);
+void write_pipe(arguments *args, char *lineptr, int *fd, char *op);
+void chain_pipe(arguments *args, char *lineptr, int *fd, char *op, int pstat);
 
 /* Descriptors */
 int choose_fd(arguments *args);
 void read_config(arguments *args);
-
-void free_list(list *head);
 
 /* alias */
 int alias(arguments *args);
@@ -182,6 +164,8 @@ void delalias(aliases *head);
 void checkalias(arguments *args);
 aliases *overwriteval(aliases *head, char *name);
 char *doublealias(aliases *head, char *value);
+
+/* signal */
 void signal_handler(int signum);
 
 #endif /* SHELL_H */
