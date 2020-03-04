@@ -182,5 +182,6 @@ void delalias(aliases *head);
 void checkalias(arguments *args);
 aliases *overwriteval(aliases *head, char *name);
 char *doublealias(aliases *head, char *value);
+void signal_handler(int signum);
 
 #endif /* SHELL_H */
