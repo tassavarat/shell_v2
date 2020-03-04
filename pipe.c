@@ -7,10 +7,10 @@
  * @fd: duplicated STDIN and STDOUT
  * @operator: operator flag
  */
-void write_pipe(arguments *args, char *lineptr, int *fd, char *operator)
+void write_pipe(arguments *args, char *lineptr, int *fd, char *op)
 {
 	args->pstat = 1;
-	*operator = 'p';
+	*op = 'p';
 	if (pipe(args->pipefd) == -1)
 	{
 		perror("pipe");
@@ -31,8 +31,7 @@ void write_pipe(arguments *args, char *lineptr, int *fd, char *operator)
  * @operator: operator flag
  * @pstat: tells which end of pipe to clean
  */
-void chain_pipe(arguments *args, char *lineptr,
-		int *fd, char *operator, int pstat)
+void chain_pipe(arguments *args, char *lineptr, int *fd, char *op, int pstat)
 {
 	fd[0] = dup(STDIN_FILENO);
 	dup2(args->pipefd[0], STDIN_FILENO);
@@ -40,7 +39,7 @@ void chain_pipe(arguments *args, char *lineptr,
 	if (pstat == 1)
 	{
 		close(args->pipefd[0]);
-		write_pipe(args, lineptr, fd, operator);
+		write_pipe(args, lineptr, fd, op);
 	}
 	else
 	{

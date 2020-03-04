@@ -152,6 +152,7 @@ int main(int ac, char *av[])
 	if (!initparam(&args, ac, av))
 	{
 		read_config(&args);
+		signal(SIGINT, signal_handler);
 		shell(&args);
 		cleanup(&args, '\0');
 	}
