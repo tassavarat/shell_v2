@@ -4,7 +4,7 @@ SHELL = /bin/bash
 CC = gcc
 CFLAGS = -Wall -Werror -Wextra -pedantic -std=gnu89 -g
 # name of the executable
-NAME = hsh
+NAME = sh
 # Find all c files in current directory and substitute
 # extension with object files (.o)
 OBJ = $(patsubst %.c,%.o, $(wildcard *.c))
