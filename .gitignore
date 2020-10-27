@@ -29,7 +29,7 @@
 *.dylib
 
 # Executables
-hsh
+sh
 *.out
 
 # Debug files
